@@ -282,31 +282,28 @@
     
     \section{Linear Regression}\label{linear-regression}
 
+\emph{Linear Regression} is one of the simplest yet fundamental
+statistical learning techniques. It is a great initial step towards more
+advanced and computationally demanding methods.
+
+This article aims to form a statistically sound approach to Linear
+Regression and its inferences while tying these to popular statistical
+packages and reproducing the results.
+
+We first begin with a brief description of Linear Regression and move on
+to investigate it in light of a dataset.
+
     \subsection{1 - Description}\label{description}
 
 Linear regression on \(p\) variables focusses on fitting a straight line
 in \(p\)-dimensions that passes as close as possible to the data points
 in order to reduce error.
 
-\begin{itemize}
-\tightlist
-\item
-  A supervised learning technique
-\item
-  Useful for predicting a quantitative response
-\item
-  Linear Regression attempts to fit a function to predict a response
-  variable
-
-  \begin{itemize}
-  \tightlist
-  \item
-    The problem is reduced to a paramteric problem of finding a set of
-    parameters
-  \item
-    The function is limited to having a straight line form
-  \end{itemize}
-\end{itemize}
+General Characteristics: - A supervised learning technique - Useful for
+predicting a quantitative response - Linear Regression attempts to fit a
+function to predict a response variable - The problem is reduced to a
+paramteric problem of finding a set of parameters - The function shape
+is limited (as a function of the parameters)
 
     \subsection{2- Advertising Dataset}\label{advertising-dataset}
 
@@ -316,31 +313,35 @@ contains 200 datapoints of sales of a particular product, and TV,
 newspaper and radio advertising budgets (all figures are in units of
 \$1,000s).
 
+First we import the required libraries
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}57}]:} \PY{c+c1}{\PYZsh{} Import modules}
-         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
-         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-         \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
-         \PY{k+kn}{import} \PY{n+nn}{random}
-         \PY{k+kn}{from} \PY{n+nn}{numpy}\PY{n+nn}{.}\PY{n+nn}{random} \PY{k}{import} \PY{n}{RandomState}
-         \PY{k+kn}{import} \PY{n+nn}{math}
-         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} Import modules}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+        \PY{k+kn}{import} \PY{n+nn}{random}
+        \PY{k+kn}{from} \PY{n+nn}{numpy}\PY{n+nn}{.}\PY{n+nn}{random} \PY{k}{import} \PY{n}{RandomState}
+        \PY{k+kn}{import} \PY{n+nn}{math}
+        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+\end{Verbatim}
+
+
+    Then we import the dataset
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{c+c1}{\PYZsh{} Import Advertising dataset (http://www\PYZhy{}bcf.usc.edu/\PYZti{}gareth/ISL/data.html)}
+        \PY{n}{advert} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}58}]:} \PY{c+c1}{\PYZsh{} Import Advertising dataset (http://www\PYZhy{}bcf.usc.edu/\PYZti{}gareth/ISL/data.html)}
-         \PY{n}{advert} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}59}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{advert}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+         \PY{n}{display}\PY{p}{(}\PY{n}{advert}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -352,29 +353,27 @@ Advertising.csv
 
     \end{Verbatim}
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}59}]:}       TV  radio  newspaper  sales
-         0  230.1   37.8       69.2   22.1
-         1   44.5   39.3       45.1   10.4
-         2   17.2   45.9       69.3    9.3
-         3  151.5   41.3       58.5   18.5
-         4  180.8   10.8       58.4   12.9
-\end{Verbatim}
-            
+    
+    \begin{verbatim}
+      TV  radio  newspaper  sales
+0  230.1   37.8       69.2   22.1
+1   44.5   39.3       45.1   10.4
+2   17.2   45.9       69.3    9.3
+3  151.5   41.3       58.5   18.5
+4  180.8   10.8       58.4   12.9
+    \end{verbatim}
+
+    
     The response variable is "sales". The predictor variables are "TV",
-"radio" and "newspaper".
+"radio" and "newspaper". We can produce a pairplot of the data below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}60}]:} \PY{n}{sns}\PY{o}{.}\PY{n}{pairplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{ax} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{pairplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}60}]:} <seaborn.axisgrid.PairGrid at 0x29948a32be0>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_7_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_8_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -385,30 +384,34 @@ and radio seem to have a slight positive correlation also. We can see
 this in the correlation matrix below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}61}]:} \PY{n}{advert}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{advert}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}61}]:}                  TV     radio  newspaper     sales
+{\color{outcolor}Out[{\color{outcolor}14}]:}                  TV     radio  newspaper     sales
          TV         1.000000  0.054809   0.056648  0.782224
          radio      0.054809  1.000000   0.354104  0.576223
          newspaper  0.056648  0.354104   1.000000  0.228299
          sales      0.782224  0.576223   0.228299  1.000000
 \end{Verbatim}
             
+    We may want to fit a line to this data which is as close as possible. We
+describe the Linear Regression model next and then apply it to this
+data.
+
     \subsection{3- Linear Regression}\label{linear-regression}
 
-The idea behind Linear Regression is that we reduce the problem of
-estimating the response variable, \(Y\) = sales, by assuming there is a
-linear function of the predictor variables, \(X_1\) = TV, \(X_2\) =
+The idea behind \emph{Linear Regression} is that we reduce the problem
+of estimating the response variable, \(Y\) = sales, by assuming there is
+a linear function of the predictor variables, \(X_1\) = TV, \(X_2\) =
 radio and \(X_3\) = newspaper which describes \(Y\). This reduces the
 problem to that of solving for the parameters \(\beta_0\), \(\beta_1\),
 \(\beta_2\) and \(\beta_3\) in the equation:
 
 \[Y \approx \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \epsilon\]
 
-where \(\epsilon\) is the error term. After approximating the
+where \(\epsilon\) is an error term. After approximating the
 coefficients \(\beta_i\) as \(\hat{\beta}_i\), we obtain an
 approximation, \(\hat{Y}\) of \(Y\). The coefficients \(\hat{\beta}_i\)
 are obtained using the observed realisations of the random variables
@@ -428,24 +431,35 @@ representated in mathematical notation for observation \(i\) as
 \(y_i - \hat{y}_i\). Letting
 \(\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1\) we have
 \(y_i - \hat{y}_i = \epsilon_i\). i.e. the error in the prediction of
-point observation \(i\).
+point observation \(i\) (also called the ith \emph{residual}).
 
 In summary, we are looking for a straight line to fit to the following
 data points as well as possible:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}62}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sales}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}84}]:} \PY{c+c1}{\PYZsh{} plt.scatter(data=advert, x=\PYZsq{}TV\PYZsq{}, y=\PYZsq{}sales\PYZsq{})}
+         \PY{c+c1}{\PYZsh{} plt.show()}
          
-         \PY{c+c1}{\PYZsh{}plt.plot([advert[\PYZsq{}TV\PYZsq{}].min(),advert[\PYZsq{}TV\PYZsq{}].max()], [advert[\PYZsq{}sales\PYZsq{}].min(),advert[\PYZsq{}sales\PYZsq{}].max()], \PYZsq{}k\PYZhy{}\PYZsq{})}
+         \PY{c+c1}{\PYZsh{} Get the figure handle and set figure size}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Get the axis}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot onto the axis}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{,} \PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sales}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}1(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The relationship between Y = Sales and X = TV in }\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{the advertising dataset}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}62}]:} <matplotlib.collections.PathCollection at 0x29946f95fd0>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_11_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -455,8 +469,8 @@ fit. A popular method is "Ordinary Least Squares". This method relies on
 minimising the Residual Sum of Squared errors (RSS). i.e. we are looking
 to minimise \(RSS = \sum_{i=1}^n \epsilon_i^2\).
 
-For the 1-parameter case we have that (the semi-colon below means the
-value of the parameters given the data we have observed)
+For the 1-parameter case we have that (the semi-colon below means 'the
+value of the parameters' given 'the data we have observed')
 
 \[RSS(\hat{\beta}_0,\hat{\beta}_1;X) = \sum_{i=1}^n \epsilon_i^2 = \sum_{i=1}^n (y_i-\hat{\beta}_0 - \hat{\beta}_1 x_i)^2\]
 
@@ -471,20 +485,23 @@ Then
 
 \[\frac{\partial RSS}{\partial \hat{\beta_0}} = 0 \implies  \hat{\beta}_0 = \frac{\sum_{i=1}^n y_i - \hat{\beta}_1 \sum_{i=1}^n y_i}{n} = \frac{n \bar{y} - \hat{\beta}_1 n \bar{x}}{n} = \bar{y} - \hat{\beta}_1 \bar{x}\]
 
-\[\frac{\partial RSS}{\partial \hat{\beta_1}} = 0 \implies  \sum_{i=1}^n y_i x_i - \hat{\beta}_0 \sum_{i=1}^n x_i - \hat{\beta}_1 \sum_{i=1}^n x_i^2 = 0 \implies \hat{\beta}_1 = \frac{n \bar{y} \bar{x} - \sum_{i=1}^n y_i x_i}{n \bar{x}^2 - \sum_{i=1}^n x_i^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x} - n \bar{y} \bar{x} + n\bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2 -n\bar{x}^2 + n\bar{x}^2} = \frac{\sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \bar{x} - \sum_{i=1}^n x_i \bar{y}  + \sum_{i=1}^n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - \sum_{i=1}^n x_i \bar{x} - \sum_{i=1}^n x_i \bar{x} + \sum_{i=1}^n \bar{x}^2}\]
+\[\frac{\partial RSS}{\partial \hat{\beta_1}} = 0 \implies  \sum_{i=1}^n y_i x_i - \hat{\beta}_0 \sum_{i=1}^n x_i - \hat{\beta}_1 \sum_{i=1}^n x_i^2 = 0\]
+
+\[\implies \hat{\beta}_1 = \frac{n \bar{y} \bar{x} - \sum_{i=1}^n y_i x_i}{n \bar{x}^2 - \sum_{i=1}^n x_i^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x} - n \bar{y} \bar{x} + n\bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2 -n\bar{x}^2 + n\bar{x}^2}\]
+
+\[= \frac{\sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \bar{x} - \sum_{i=1}^n x_i \bar{y}  + \sum_{i=1}^n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - \sum_{i=1}^n x_i \bar{x} - \sum_{i=1}^n x_i \bar{x} + \sum_{i=1}^n \bar{x}^2}\]
 
 Where, in the penultimate line we completed the square and in the last
-equality we used the equality
+equality we used
 \(n\bar{y} \bar{x} = \sum_{i=1}^n y_i \bar{x} = \sum_{i=1}^n x_i \bar{y}\)
 and \(n\bar{x}^2 = n\bar{x} \bar{x} = \sum_{i=1}^n x_i \bar{x}\).
 Factorising
 
 \[\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}\]
 
-In the above, we have used the fact that
-\(\hat{\mu} = \bar{x} = \frac{1}{n} \sum_{i=1}^n\) is an unbiased
-\emph{Maximum Likelihood Estimator} (MLE) for the population mean
-\(\mu\) (see Appendix).
+In the above, \(\hat{\mu} = \bar{x} = \frac{1}{n} \sum_{i=1}^n\) is an
+unbiased \emph{Maximum Likelihood Estimator} (MLE) for the population
+mean \(\mu\) (see Appendix).
 
 We have now found the values of \((\hat{\beta}_0,\hat{\beta}_1)\) which
 corresponds to the extrema of RSS. We will still need to show that this
@@ -532,7 +549,7 @@ fit. The three functions are chosen as:
 3- \(f_3(x) = 4.67 + 5.07*sin(x)\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}63}]:} \PY{c+c1}{\PYZsh{}f\PYZus{}1(x)=4.67+5.07∗x}
+{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{}f\PYZus{}1(x)=4.67+5.07∗x}
          \PY{k}{def} \PY{n+nf}{f\PYZus{}1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
              \PY{k}{return} \PY{l+m+mf}{4.67} \PY{o}{+} \PY{l+m+mf}{5.07}\PY{o}{*}\PY{n}{x}
          
@@ -547,7 +564,10 @@ fit. The three functions are chosen as:
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}64}]:} \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} Set the seed}
+         \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Choose 1000 random observations for x between 0 and 100}
          \PY{n}{X} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0}
@@ -566,28 +586,31 @@ fit. The three functions are chosen as:
 \end{Verbatim}
 
 
-    First case 1- f\_1
+    First we look at what \(f_1\) looks like
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}65}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}45}]:} \PY{c+c1}{\PYZsh{} Plot}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}1(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scatter plot of f\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}65}]:} Text(0,0.5,'f\_1(x)')
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_16_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_18_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    Fit the model \(\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1\) to the
-data. We know that
+    The task is to fit the model
+\(\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X_1\) to the data. We know
+that
 
 \[\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}\]
 
@@ -596,21 +619,25 @@ and
 \[\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}\]
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}305}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
-          \PY{n}{x\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          \PY{n}{y\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}
-          
-          \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar1}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar1}\PY{p}{)}
-              \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar1}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              
-          \PY{n}{beta1\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
-          \PY{n}{beta1\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar1} \PY{o}{\PYZhy{}} \PY{n}{beta1\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar1}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta1\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta1\PYZus{}1}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}85}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
+         \PY{n}{x\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         \PY{n}{y\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}
+         
+         \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Add to the numerator for beta\PYZus{}1}
+             \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar1}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar1}\PY{p}{)}
+             
+             \PY{c+c1}{\PYZsh{} Add to the denominator for beta\PYZus{}1}
+             \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar1}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+             
+         \PY{n}{beta1\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
+         \PY{n}{beta1\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar1} \PY{o}{\PYZhy{}} \PY{n}{beta1\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar1}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PYZbs{}
+               \PY{n+nb}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta1\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta1\PYZus{}1}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -619,88 +646,135 @@ Y = 5.50124312485292 + 5.064254524922961 * X
 
     \end{Verbatim}
 
+    Below, we see how the line defined by the equation above fits the data
+for \(f_1\)
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}306}]:} \PY{n}{x1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y1} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{x1}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}1(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{y1}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}46}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
+         
+         \PY{c+c1}{\PYZsh{} The equation using the betas above}
+         \PY{n}{y1} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{x1} 
+         
+         \PY{c+c1}{\PYZsh{} Plot the observed data}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot the regression line}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{y1}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}1(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data for f\PYZus{}1 and the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}306}]:} [<matplotlib.lines.Line2D at 0x299527727b8>]
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_22_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    Let's see what the residuals look like by plotting them
+    Let's see what the residuals look like by plotting them. The residual
+require the knowledge of the actual response variables. So we use the
+regression line above to predict the response variable using the
+observed predictor variables. Then we plot them using a histogram to
+gain some insight into their distribution
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}307}]:} \PY{n}{y1\PYZus{}fitted} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{X}
-          \PY{n}{Res\PYZus{}1} \PY{o}{=} \PY{n}{y1\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}1}
-          
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PYZbs{}
-                \PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}90}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+         \PY{n}{y1\PYZus{}fitted} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{X}
+         
+         \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
+         \PY{c+c1}{\PYZsh{} the observed responses}
+         \PY{n}{Res\PYZus{}1} \PY{o}{=} \PY{n}{y1\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}1}
+         
+         \PY{c+c1}{\PYZsh{} Plot the residuals}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A histogram of the residuals for f\PYZus{}1 when }\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{                fitted with the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}n}\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}1}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_24_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
-This is roughly a normal distribution with mean -1.2157386208855315e-14 and standard deviation 10.08588495757817
+This is roughly a normal distribution with mean -1.2157386208855315e-14 
+and standard deviation 10.08588495757817
 
     \end{Verbatim}
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
     Since the residuals are roughly normally distributed, our model may be a
-good choice. Now let's do the same for f\_2.
+good choice. In fact, the standard deviation for the residuals was
+roughly equal to the standard deviation for the error term when we
+constructed the function \(f_1\). A model may suffer from two types of
+error: error due to a discrepancy between the chosen function shape
+(here a linear model) and the true function shape (reducible); error due
+to random noise (irreducible). We can see here that the residuals are
+from irreducible error. Now let's do the same for f\_2.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}113}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}50}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot onto this axis}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the axis labels}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scatter plot of f\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}113}]:} Text(0,0.5,'f\_2(x)')
+{\color{outcolor}Out[{\color{outcolor}50}]:} Text(0.5,1,'Scatter plot of f\_2')
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}308}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
-          \PY{n}{x\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          \PY{n}{y\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
-          
-          \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar2}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar2}\PY{p}{)}
-              \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              
-          \PY{n}{beta2\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
-          \PY{n}{beta2\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar2} \PY{o}{\PYZhy{}} \PY{n}{beta2\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar2}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta2\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta2\PYZus{}1}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
+         \PY{n}{x\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         \PY{n}{y\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
+         
+         \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Add to the numerator for beta\PYZus{}1}
+             \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar2}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar2}\PY{p}{)}
+             
+             \PY{c+c1}{\PYZsh{} Add to the denominator for beta\PYZus{}1}
+             \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+             
+         \PY{n}{beta2\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
+         \PY{n}{beta2\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar2} \PY{o}{\PYZhy{}} \PY{n}{beta2\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar2}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta2\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta2\PYZus{}1}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -709,69 +783,94 @@ Y = -8445.98030682202 + 506.16066894401735 * X
 
     \end{Verbatim}
 
+    Below, we see how the line defined by the equation above fits the data
+for \(f_2\)
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}309}]:} \PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y2} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{x2}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x2}\PY{p}{,}\PY{n}{y2}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}51}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
+         
+         \PY{c+c1}{\PYZsh{} The predicted responses of these 1000 numbers}
+         \PY{n}{y2} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{x2}
+         
+         \PY{c+c1}{\PYZsh{} Plot}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x2}\PY{p}{,}\PY{n}{y2}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data and the regression fit for f\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}309}]:} [<matplotlib.lines.Line2D at 0x29952992780>]
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}310}]:} \PY{n}{y2\PYZus{}fitted} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{X}
-          \PY{n}{Res\PYZus{}2} \PY{o}{=} \PY{n}{y2\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}2}
-          
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}2}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The residuals are certainly not from a normal distribution}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}52}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+         \PY{n}{y2\PYZus{}fitted} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{X}
+         
+         \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and the observed responses}
+         \PY{n}{Res\PYZus{}2} \PY{o}{=} \PY{n}{y2\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}2}
+         
+         
+         \PY{c+c1}{\PYZsh{} Plot the residuals}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}2}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A histogram of the residuals for f\PYZus{}2 when fitted with the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The residuals are certainly not from a normal distribution}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_30_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
 The residuals are certainly not from a normal distribution
 
     \end{Verbatim}
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    So let's try \(X^2\) as a parameter instead of \(X\) in our linear
-model.
+    So let's try \(X^2\) as a parameter instead of \(X\) in our linear model
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}312}]:} \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          
-          \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
-          \PY{n}{x\PYZus{}bar22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{)}
-          \PY{n}{y\PYZus{}bar22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
-          
-          \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar22}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar22}\PY{p}{)}
-              \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar22}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              
-          \PY{n}{beta22\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
-          \PY{n}{beta22\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar22} \PY{o}{\PYZhy{}} \PY{n}{beta22\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar22}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta22\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta22\PYZus{}1}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}53}]:} \PY{c+c1}{\PYZsh{} Create X\PYZca{}2 parameter}
+         \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         
+         \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
+         \PY{n}{x\PYZus{}bar22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{)}
+         \PY{n}{y\PYZus{}bar22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
+         
+         \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Calculate the numerator for beta\PYZus{}1}
+             \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar22}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar22}\PY{p}{)}
+             
+             \PY{c+c1}{\PYZsh{} Calculate the denominator for beta\PYZus{}1}
+             \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar22}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+             
+         \PY{n}{beta22\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
+         \PY{n}{beta22\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar22} \PY{o}{\PYZhy{}} \PY{n}{beta22\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar22}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta22\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta22\PYZus{}1}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -780,90 +879,128 @@ Y = 14.470063153316005 + 5.075020979320466 * X\^{}2
 
     \end{Verbatim}
 
+    Below, we see how the new line defined by the equation above fits the
+data for \(f_2\)
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}313}]:} \PY{n}{x22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y22} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{p}{(}\PY{p}{(}\PY{n}{x22}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x22}\PY{p}{,}\PY{n}{y22}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}54}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Predicted responses to the 1000 numbers}
+         \PY{n}{y22} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{p}{(}\PY{p}{(}\PY{n}{x22}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot this regression line and the data}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x22}\PY{p}{,}\PY{n}{y22}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data and the new regression fit for f\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}313}]:} [<matplotlib.lines.Line2D at 0x29952b7d588>]
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    Now we investigate the residuals to see if the new regression fit using
+\(X^2\) as a parameter yields residuals that look more normally
+distributed
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}314}]:} \PY{n}{y22\PYZus{}fitted} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          \PY{n}{Res\PYZus{}22} \PY{o}{=} \PY{n}{y22\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}2}
-          
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PYZbs{}
-                \PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}58}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+         \PY{n}{y22\PYZus{}fitted} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         
+         \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and the observed responses}
+         \PY{n}{Res\PYZus{}22} \PY{o}{=} \PY{n}{y22\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}2}
+         
+         \PY{c+c1}{\PYZsh{} Plot the residuals}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A histogram of the residuals for f\PYZus{}2 when fitted with the new regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PYZbs{}
+               \PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}22}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_36_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
 This is roughly a normal distribution with mean -1.1250449460931123e-12 and standard deviation 518.5583078222347
 
     \end{Verbatim}
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_30_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
     This shows that we can transform an independent variable and apply
 linear regression in order to regress the response variable onto the
 transformed Explanatory variable. This increases the power of linear
-regression techniques.
+regression techniques. Note also that the standard deviation from the
+residual distribution is close to the 500 for the errors when the
+function was created.
 
-    Now let's apply linear regression to f\_3.
+Now let's apply linear regression to f\_3 in a similar manner
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}120}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}59}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot onto this axis}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the axis labels}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Scatter plot of f\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}120}]:} Text(0,0.5,'f\_3(x)')
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    It is very clear from the above scatter plot that we will not be able to
+get away with fitting a linear line to the data. This is a hint that we
+should use transformed variables. But let's carry out a linear fit to
+show that the results can be misleading when we only consider the
+residuals plot to assess the quality of fit
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}315}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
-          \PY{n}{x\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          \PY{n}{y\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}
-          
-          \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar3}\PY{p}{)}
-              \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              
-          \PY{n}{beta3\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
-          \PY{n}{beta3\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar3} \PY{o}{\PYZhy{}} \PY{n}{beta3\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar3}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta3\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta3\PYZus{}1}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}62}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
+         \PY{n}{x\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         \PY{n}{y\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}
+         
+         \PY{n}{numerator} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{denominator} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{numerator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar3}\PY{p}{)}
+             \PY{n}{denominator} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{x\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+             
+         \PY{n}{beta3\PYZus{}1} \PY{o}{=} \PY{n}{numerator}\PY{o}{/}\PY{n}{denominator}
+         \PY{n}{beta3\PYZus{}0} \PY{o}{=} \PY{n}{y\PYZus{}bar3} \PY{o}{\PYZhy{}} \PY{n}{beta3\PYZus{}1}\PY{o}{*}\PY{n}{x\PYZus{}bar3}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y = }\PY{l+s+si}{\PYZob{}beta\PYZus{}0\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}beta\PYZus{}1\PYZcb{}}\PY{l+s+s1}{ * X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta\PYZus{}0} \PY{o}{=} \PY{n}{beta3\PYZus{}0}\PY{p}{,} \PY{n}{beta\PYZus{}1} \PY{o}{=} \PY{n}{beta3\PYZus{}1}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -872,58 +1009,81 @@ Y = 10.511143457700811 + -0.1011987818100197 * X
 
     \end{Verbatim}
 
+    Below, we see how the line defined by the equation above fits the data
+for \(f_3\)
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}316}]:} \PY{n}{x3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y3} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{x3}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x3}\PY{p}{,}\PY{n}{y3}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}63}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
+         
+         \PY{c+c1}{\PYZsh{} Predict the response for those numbers}
+         \PY{n}{y3} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{x3}
+         
+         \PY{c+c1}{\PYZsh{} Plot both the data and the fit}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x3}\PY{p}{,}\PY{n}{y3}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data and the new regression fit for f\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}316}]:} [<matplotlib.lines.Line2D at 0x29952c37d68>]
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_35_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    We now assess the residuals
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}317}]:} \PY{n}{y3\PYZus{}fitted} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{X}
-          \PY{n}{Res\PYZus{}3} \PY{o}{=} \PY{n}{y3\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}3}
-          
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}3}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This not a normal distribution but it is not that far off.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}64}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+         \PY{n}{y3\PYZus{}fitted} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{X}
+         
+         \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and the observed responses}
+         \PY{n}{Res\PYZus{}3} \PY{o}{=} \PY{n}{y3\PYZus{}fitted} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}3}
+         
+         \PY{c+c1}{\PYZsh{} Plot the residuals}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}3}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A histogram of the residuals for f\PYZus{}3 when fitted with the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This not a normal distribution but it is not that far off.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_44_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
 This not a normal distribution but it is not that far off.
 
     \end{Verbatim}
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_36_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
     Even though a plot of the residuals does not show a clear divergence
 from a normal distribution, it is clear from the predicted-observed plot
 that this is not a good model and does not fit the data in a
-satisfactory manner. We therefore need more tools in order to asses the
-level of fit.
+satisfactory manner. We therefore need additional tools in order to
+asses the level of fit.
 
 A metric we can use in order to assess the accuracy of the fit is the
-R-Squared (\(R^2\)) statistic. The \(R^2\) statistic measures the
+\emph{R-Squared} (\(R^2\)) statistic. The \(R^2\) statistic measures the
 percentage of variability of the response variable that is explained by
-the explanatory variable. This is mathematically:
+the explanatory variable. This is mathematically expressed as:
 
 \[R^2 = \frac{TSS-RSS}{TSS}\]
 
@@ -931,16 +1091,35 @@ where \(TSS = \sum_{i=1}^n(y_i - \bar{y})^2\) is the \emph{total sum of
 squares} and \(RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2\) is the
 \emph{residual sum of squares}.
 
+STATEMENT: The \emph{Residual Squared Error}
+\(RSE=\sqrt{ \frac{ RSS }{ n-2 } }\) is a measure of lack of fit.
+\(R^2\), as the form above suggests, is the proportion of variance that
+is explained. For a simple linear regression with 1 parameters (see
+Appendix):
+
+\[R^2 = Cor(X,Y)^2 = \left( \frac{ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) }{ \sqrt{ \sum_{i=1}^n (x_i - \bar{x})^2 \sum_{i=1}^n (y_i - \bar{y})^2 } } \right) ^2\]
+
+However, for multiple linear regression this does not hold. It is not
+clear how to adapt the Correlation in order to explain the fit of a
+multiple regression model. \(R^2\) however, is a clearly defined metric
+which is easily extended to multiple regression.
+
+Below, we calculate this metric for \(f_3\)
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}124}]:} \PY{n}{TSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{RSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{TSS\PYZus{}3} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              \PY{n}{RSS\PYZus{}3} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y3\PYZus{}fitted}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-              
-          \PY{n}{R\PYZus{}sq\PYZus{}3} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}3} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}3}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}3}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}3}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}65}]:} \PY{c+c1}{\PYZsh{} TSS}
+         \PY{n}{TSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{c+c1}{\PYZsh{} RSS}
+         \PY{n}{RSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{TSS\PYZus{}3} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar3}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+             \PY{n}{RSS\PYZus{}3} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y3\PYZus{}fitted}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         
+         \PY{c+c1}{\PYZsh{} R\PYZca{}2 for f\PYZus{}3}
+         \PY{n}{R\PYZus{}sq\PYZus{}3} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}3} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}3}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}3}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}3}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -949,50 +1128,68 @@ R\^{}2 = 0.5940625125965683
 
     \end{Verbatim}
 
-    This means that roughly 59\% of the variability in Y\_3 is explained by
-X. Let's calculate the \(R^2\) statistic for all the models above.
+    This means that roughly 59\% of the variability in \(Y_3\) is explained
+by \(X\). Let's calculate the \(R^2\) statistic for all the models
+above. To do this, we create a function that accepts observed and fitted
+values and returns the TSS and RSS of the fit
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}233}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
-              \PY{n}{TSS} \PY{o}{=} \PY{l+m+mi}{0}
-              \PY{n}{RSS} \PY{o}{=} \PY{l+m+mi}{0}
-              
-              \PY{n}{y\PYZus{}bar} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{)}
-          
-              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-                  \PY{n}{TSS} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-                  \PY{n}{RSS} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}fitted}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-                  
-              \PY{k}{return} \PY{n}{TSS}\PY{p}{,}\PY{n}{RSS}
+{\color{incolor}In [{\color{incolor}66}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    A function that calculates the TSS and RSS of a fit given observed and fitted values}
+         \PY{l+s+sd}{    y\PYZus{}observed := Observed data as a series object}
+         \PY{l+s+sd}{    y\PYZus{}fitted := Fitted data as a series object}
+         \PY{l+s+sd}{    output := A (TSS,RSS) tuple of floats}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+             
+             \PY{c+c1}{\PYZsh{} TSS}
+             \PY{n}{TSS} \PY{o}{=} \PY{l+m+mi}{0}
+             
+             \PY{c+c1}{\PYZsh{} RSS}
+             \PY{n}{RSS} \PY{o}{=} \PY{l+m+mi}{0}
+             
+             \PY{c+c1}{\PYZsh{} Get the mean of the observed values}
+             \PY{n}{y\PYZus{}bar} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{)}
+         
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{TSS} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}bar}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+                 \PY{n}{RSS} \PY{o}{+}\PY{o}{=} \PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}fitted}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+                 
+             \PY{k}{return} \PY{n}{TSS}\PY{p}{,}\PY{n}{RSS}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}239}]:} \PY{n}{TSS\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}1} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted}\PY{p}{)}
-              
-          \PY{n}{R\PYZus{}sq\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}1} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}1}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}1}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          
-          
-          
-          \PY{n}{TSS\PYZus{}2}\PY{p}{,}\PY{n}{RSS\PYZus{}2} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y2\PYZus{}fitted}\PY{p}{)}
-              
-          \PY{n}{R\PYZus{}sq\PYZus{}2} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}2} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}2}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}2}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}2}\PY{p}{)}\PY{p}{)}
-          
-          
-          
-          \PY{n}{TSS\PYZus{}22}\PY{p}{,}\PY{n}{RSS\PYZus{}22} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted}\PY{p}{)}
-              
-          \PY{n}{R\PYZus{}sq\PYZus{}22} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}22} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}22}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}22}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}22}\PY{p}{)}\PY{p}{)}
-          
-          
-          
-          \PY{n}{TSS\PYZus{}3}\PY{p}{,}\PY{n}{RSS\PYZus{}3} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y3\PYZus{}fitted}\PY{p}{)}
-          
-          \PY{n}{R\PYZus{}sq\PYZus{}3} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}3} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}3}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}3}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}3}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}67}]:} \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}1}
+         \PY{n}{TSS\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}1} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the fit to f\PYZus{}1}
+         \PY{n}{R\PYZus{}sq\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}1} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}1}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}1}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}2}
+         \PY{n}{TSS\PYZus{}2}\PY{p}{,}\PY{n}{RSS\PYZus{}2} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y2\PYZus{}fitted}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the fit to f\PYZus{}2}
+         \PY{n}{R\PYZus{}sq\PYZus{}2} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}2} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}2}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}2}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}2}\PY{p}{)}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the new fitted regression line to f\PYZus{}2}
+         \PY{n}{TSS\PYZus{}22}\PY{p}{,}\PY{n}{RSS\PYZus{}22} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted}\PY{p}{)}
+            
+         \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the new fit to f\PYZus{}2}
+         \PY{n}{R\PYZus{}sq\PYZus{}22} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}22} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}22}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}22}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}22}\PY{p}{)}\PY{p}{)}
+         
+         
+         \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}3}
+         \PY{n}{TSS\PYZus{}3}\PY{p}{,}\PY{n}{RSS\PYZus{}3} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y3\PYZus{}fitted}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the fit to f\PYZus{}3}
+         \PY{n}{R\PYZus{}sq\PYZus{}3} \PY{o}{=} \PY{p}{(}\PY{n}{TSS\PYZus{}3} \PY{o}{\PYZhy{}} \PY{n}{RSS\PYZus{}3}\PY{p}{)}\PY{o}{/}\PY{n}{TSS\PYZus{}3}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3 \PYZhy{} R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{R\PYZus{}sq\PYZus{}3}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1007,81 +1204,92 @@ Model for Y\_3: Explanatory variable X for Y\_3 - R\^{}2 = 0.5940625125965683
     From the above we can see that the model for \(Y_1\) that is linear in
 \(X\) is satisfactory; The model for \(Y_2\) that is non-linear
 exaplains more variability of the response variable than the linear
-model; The model for \(Y_3\) shows that we are probably not fitting the
-correct form of the function, i.e. we have introduced bias in that the
-real function is not of the form \(a+bX\) for constants \(a\) and \(b\).
-We can try a conbination of cinear combinations of \(X\), \(X^2\),
-\(X^3\) as well. We do this after we have introduced a much simpler way
-of obtaining the above fits using Scikit-Learn packages.
+model (note that in this case, the \(R^2\) metric alone wouldn't tell us
+whether the fit linear in \(X\) was terrible. But along with the
+residual plot we would arrive at the correct conclusion); The model for
+\(Y_3\) shows that we are probably not fitting the correct form of the
+function, i.e. we have introduced bias in that the real function is not
+of the form \(a+bX\) for constants \(a\) and \(b\) and that applying a
+model non-linear in \(X\) may provide a boost to the explained variance.
+We can try combinations of \(X\), \(X^2\), \(X^3\) as well. We do this
+after we have introduced a much simpler way of obtaining the above fits
+using Scikit-Learn packages.
 
 Below, we use sklearn.linear\_model.LinearRegression() in order to fit
 and sklearn.metrics.r2\_score() in order to calculate the \(R^2\)
-statistic.
+statistic. We will see that the results match the manual results above
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}170}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
-          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{r2\PYZus{}score}
-          
-          \PY{n}{lm1} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          \PY{n}{lm1}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n}{y1\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{lm2} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          \PY{n}{lm2}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm2}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm2}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n}{y2\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm2}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm2}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y2\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{lm22} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          \PY{n}{lm22}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm22}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm22}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n}{y22\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm22}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm22}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{lm3} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          \PY{n}{lm3}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm3}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm3}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n}{y3\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm3}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm3}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y3\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Now we try adding the variables X,X\PYZca{}2 and X\PYZca{}3}
-          
-          \PY{c+c1}{\PYZsh{}Create transformed variables}
-          \PY{n}{X2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          \PY{n}{X3} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          
-          \PY{n}{lm32} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          \PY{n}{X3\PYZus{}collection} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-          \PY{n}{lm32}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X3\PYZus{}collection}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variables X,X\PYZca{}2,X\PYZca{}3 for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}3 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{)}
-          \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y32\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}79}]:} \PY{c+c1}{\PYZsh{} Import the linear model and the metric we\PYZsq{}ll be using}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{r2\PYZus{}score}
+         
+         \PY{c+c1}{\PYZsh{} Create the model object}
+         \PY{n}{lm1} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Fit this model to the data for f\PYZus{}1}
+         \PY{n}{lm1}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Get the fitted values and print it}
+         \PY{n}{y1\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{lm2} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         \PY{n}{lm2}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm2}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm2}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y2\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm2}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm2}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y2\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{lm22} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         \PY{n}{lm22}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm22}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm22}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y22\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm22}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm22}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{lm3} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         \PY{n}{lm3}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm3}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm3}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y3\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm3}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm3}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y3\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Now we try adding the variables X,X\PYZca{}2 and X\PYZca{}3}
+         
+         \PY{c+c1}{\PYZsh{}Create transformed variables}
+         \PY{n}{X2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         \PY{n}{X3} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         
+         \PY{n}{lm32} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         \PY{n}{X3\PYZus{}collection} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{lm32}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X3\PYZus{}collection}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variables X,X\PYZca{}2,X\PYZca{}3 for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}3 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y32\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1119,58 +1327,75 @@ R\^{}2 = 0.9229011520420615
 
     \end{Verbatim}
 
-    In the above, we fit using 3 explanatory variables, namely \(X\),
-\(X^2\), \(X^3\) with coefficients \(\beta_1\), \(\beta_2\), \(beta_3\)
-respectively. We can see that we have a much improved \(R^2\) statistic
-meaning we have managed to explain much more of the data using the
-transformed variables we have created. We can plot the model to see how
-well it follows the response variable.
+    In the above, we fit a model using 3 explanatory variables, namely
+\(X\), \(X^2\), \(X^3\) with coefficients \(\beta_1\), \(\beta_2\),
+\(\beta_3\) respectively. We can see that we have a much improved
+\(R^2\) statistic for the fitted model to \(f_3\) meaning we have
+managed to explain much more of the data using the transformed variables
+we have created. We can plot the model to see how well it follows the
+response variable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}171}]:} \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y32}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}80}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
+         \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         
+         \PY{c+c1}{\PYZsh{} Plot the data and the fit}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y32}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the lables and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data and the model using X,X\PYZca{}2 and X\PYZca{}3 as predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}171}]:} [<matplotlib.lines.Line2D at 0x2994c5926a0>]
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_53_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    We can also check the residual plot
+    We can also check the residuals plot
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}174}]:} \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          \PY{n}{Res\PYZus{}32} \PY{o}{=} \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}3}
-          
-          \PY{n}{plt}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PYZbs{}
-                \PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}81}]:} \PY{c+c1}{\PYZsh{} Calculate the fitted values using the observed values}
+         \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         
+         \PY{c+c1}{\PYZsh{} Calculate the residuals}
+         \PY{n}{Res\PYZus{}32} \PY{o}{=} \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{\PYZhy{}} \PY{n}{Y\PYZus{}3}
+         
+         \PY{c+c1}{\PYZsh{} Plot the residuals}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the lables and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the residuals of the model using X,X\PYZca{}2 and X\PYZca{}3 as predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PYZbs{}
+               \PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_55_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
 This is roughly a normal distribution with mean -1.7408297026122454e-15 and standard deviation 1.043797076853439
 
     \end{Verbatim}
 
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_47_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
     It is not a surprise that we were able to fit a function of the form
 \(f(x) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3\). Using taylor
 expansion, \(f(x) = sin(x)\) estimated around the point \(x=0\) as
@@ -1188,29 +1413,40 @@ Let's plot this along with the above for smaller values of X for which
 this approximation of sin(x) is acceptable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}230}]:} \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          \PY{n}{y\PYZus{}taylor\PYZus{}32} \PY{o}{=} \PY{l+m+mf}{4.67} \PY{o}{+} \PY{p}{(}\PY{l+m+mf}{5.07}\PY{o}{/}\PY{l+m+mi}{20}\PY{p}{)}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{l+m+mi}{0}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{l+m+mf}{5.07}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{20}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3} \PY{o}{*} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
-          \PY{n}{X\PYZus{}small} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{\PYZlt{}} \PY{l+m+mi}{50}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}
-          \PY{n}{Y\PYZus{}small} \PY{o}{=} \PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{l+m+mi}{50}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X\PYZus{}small}\PY{p}{,}\PY{n}{Y\PYZus{}small}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y32}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Linear Model}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y\PYZus{}taylor\PYZus{}32}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Taylor Expansion}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}83}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
+         
+         \PY{c+c1}{\PYZsh{} Predictions}
+         \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         
+         \PY{c+c1}{\PYZsh{} Prediction using Taylor expansion}
+         \PY{n}{y\PYZus{}taylor\PYZus{}32} \PY{o}{=} \PY{l+m+mf}{4.67} \PY{o}{+} \PY{p}{(}\PY{l+m+mf}{5.07}\PY{o}{/}\PY{l+m+mi}{20}\PY{p}{)}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{l+m+mi}{0}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{l+m+mf}{5.07}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{20}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3} \PY{o}{*} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
+         
+         \PY{c+c1}{\PYZsh{} Only get the observed predictors and response where the predictors are less than 50}
+         \PY{n}{X\PYZus{}small} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{\PYZlt{}} \PY{l+m+mi}{50}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+         \PY{n}{Y\PYZus{}small} \PY{o}{=} \PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{l+m+mi}{50}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} Plot the data, the fitted model and the taylor expansion}
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X\PYZus{}small}\PY{p}{,}\PY{n}{Y\PYZus{}small}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Data}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y32}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Linear Model}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x32}\PY{p}{,}\PY{n}{y\PYZus{}taylor\PYZus{}32}\PY{p}{,}\PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Taylor Expansion}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Set the labels and title}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A comparison of the fits from the regression model and the Taylor exansion of f\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Add the legend}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}230}]:} <matplotlib.legend.Legend at 0x2995179d320>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_49_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_57_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1227,7 +1463,7 @@ against
 For the first model we have the fitted model
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}246}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1261,48 +1497,48 @@ where \(^{(0)}\) denotes the null value.
 (PROOF that this is distributed as student t?)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}332}]:} \PY{c+c1}{\PYZsh{} we need the scipy.stats package for the t\PYZhy{}distribution}
-          \PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k}{import} \PY{n}{stats}
-          
-          \PY{c+c1}{\PYZsh{} number of observations n}
-          \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} residual standard error}
-          \PY{n}{RSE\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{RSS\PYZus{}1}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} variance of x = sum (x\PYZus{}i \PYZhy{} x\PYZus{}bar)\PYZca{}2. Note that this is the population variance calculation}
-          \PY{c+c1}{\PYZsh{} so we would need to multiply by n}
-          \PY{n}{varx\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{var}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} mean of x}
-          \PY{n}{meanx\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
-          
-          \PY{n}{SE\PYZus{}beta\PYZus{}0} \PY{o}{=} \PY{n}{RSE\PYZus{}1} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{n}{n} \PY{o}{+} \PY{n}{meanx\PYZus{}1}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{*}\PY{n}{varx\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          \PY{n}{SE\PYZus{}beta\PYZus{}1} \PY{o}{=} \PY{n}{RSE\PYZus{}1} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{*}\PY{n}{varx\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SE(beta\PYZus{}0) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE(beta\PYZus{}1) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{SE\PYZus{}beta\PYZus{}0}\PY{p}{,}\PY{n}{SE\PYZus{}beta\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} null hypothesis}
-          \PY{n}{betanull\PYZus{}0} \PY{o}{=} \PY{l+m+mi}{0}
-          \PY{n}{betanull\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{n}{tstatistic1\PYZus{}0} \PY{o}{=} \PY{p}{(}\PY{n}{beta1\PYZus{}0} \PY{o}{\PYZhy{}} \PY{n}{betanull\PYZus{}0}\PY{p}{)}\PY{o}{/}\PY{n}{SE\PYZus{}beta\PYZus{}0}
-          \PY{n}{tstatistic1\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{n}{beta1\PYZus{}1} \PY{o}{\PYZhy{}} \PY{n}{betanull\PYZus{}1}\PY{p}{)}\PY{o}{/}\PY{n}{SE\PYZus{}beta\PYZus{}1}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 t\PYZhy{}statistic = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 t\PYZhy{}statistic = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} p\PYZhy{}value}
-          \PY{c+c1}{\PYZsh{} the following function calculates the area under the student t pdf with 2 degrees of freedom that is less than \PYZhy{}4.303}
-          \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{4.303}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} calculate the p\PYZhy{}value using the tstatistic and degrees of freedom n\PYZhy{}2}
-          \PY{n}{pval1\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
-          \PY{n}{pval1\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval1\PYZus{}0}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval1\PYZus{}1}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{These are both statistically significant!}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} we need the scipy.stats package for the t\PYZhy{}distribution}
+         \PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k}{import} \PY{n}{stats}
+         
+         \PY{c+c1}{\PYZsh{} number of observations n}
+         \PY{n}{n} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} residual standard error}
+         \PY{n}{RSE\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{RSS\PYZus{}1}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} variance of x = sum (x\PYZus{}i \PYZhy{} x\PYZus{}bar)\PYZca{}2. Note that this is the population variance calculation}
+         \PY{c+c1}{\PYZsh{} so we would need to multiply by n}
+         \PY{n}{varx\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{var}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} mean of x}
+         \PY{n}{meanx\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+         
+         \PY{n}{SE\PYZus{}beta\PYZus{}0} \PY{o}{=} \PY{n}{RSE\PYZus{}1} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{n}{n} \PY{o}{+} \PY{n}{meanx\PYZus{}1}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{*}\PY{n}{varx\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         \PY{n}{SE\PYZus{}beta\PYZus{}1} \PY{o}{=} \PY{n}{RSE\PYZus{}1} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mf}{1.0}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{*}\PY{n}{varx\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SE(beta\PYZus{}0) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, SE(beta\PYZus{}1) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{SE\PYZus{}beta\PYZus{}0}\PY{p}{,}\PY{n}{SE\PYZus{}beta\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} null hypothesis}
+         \PY{n}{betanull\PYZus{}0} \PY{o}{=} \PY{l+m+mi}{0}
+         \PY{n}{betanull\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{n}{tstatistic1\PYZus{}0} \PY{o}{=} \PY{p}{(}\PY{n}{beta1\PYZus{}0} \PY{o}{\PYZhy{}} \PY{n}{betanull\PYZus{}0}\PY{p}{)}\PY{o}{/}\PY{n}{SE\PYZus{}beta\PYZus{}0}
+         \PY{n}{tstatistic1\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{n}{beta1\PYZus{}1} \PY{o}{\PYZhy{}} \PY{n}{betanull\PYZus{}1}\PY{p}{)}\PY{o}{/}\PY{n}{SE\PYZus{}beta\PYZus{}1}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 t\PYZhy{}statistic = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 t\PYZhy{}statistic = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} p\PYZhy{}value}
+         \PY{c+c1}{\PYZsh{} the following function calculates the area under the student t pdf with 2 degrees of freedom that is less than \PYZhy{}4.303}
+         \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mf}{4.303}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} calculate the p\PYZhy{}value using the tstatistic and degrees of freedom n\PYZhy{}2}
+         \PY{n}{pval1\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{pval1\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval1\PYZus{}0}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval1\PYZus{}1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{These are both statistically significant!}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1317,7 +1553,7 @@ These are both statistically significant!
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}350}]:} \PY{k}{def} \PY{n+nf}{calcpvalue}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{,}\PY{n}{beta\PYZus{}0}\PY{p}{,}\PY{n}{beta\PYZus{}1}\PY{p}{,}\PY{n}{betanull\PYZus{}0}\PY{p}{,}\PY{n}{betanull\PYZus{}1}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}151}]:} \PY{k}{def} \PY{n+nf}{calcpvalue}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{,}\PY{n}{beta\PYZus{}0}\PY{p}{,}\PY{n}{beta\PYZus{}1}\PY{p}{,}\PY{n}{betanull\PYZus{}0}\PY{p}{,}\PY{n}{betanull\PYZus{}1}\PY{p}{)}\PY{p}{:}
               \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
           \PY{l+s+sd}{    A function to calculate whether the coefficients in a model with 1 variable is statistically significant.}
           \PY{l+s+sd}{    X = a list for the data for the variable}
@@ -1362,15 +1598,16 @@ These are both statistically significant!
               \PY{c+c1}{\PYZsh{} p\PYZhy{}value}
           
               \PY{c+c1}{\PYZsh{} calculate the p\PYZhy{}value using the tstatistic and degrees of freedom n\PYZhy{}2}
+              \PY{c+c1}{\PYZsh{} Multiply by 2 since it\PYZsq{}s a 2 tailed test}
               \PY{k}{if}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}0} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
-                  \PY{n}{pval\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+                  \PY{n}{pval\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}
               \PY{k}{else}\PY{p}{:}
-                  \PY{n}{pval\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+                  \PY{n}{pval\PYZus{}0} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}0}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}
                   
               \PY{k}{if}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}1} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{:}
-                  \PY{n}{pval\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+                  \PY{n}{pval\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}
               \PY{k}{else}\PY{p}{:}
-                  \PY{n}{pval\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+                  \PY{n}{pval\PYZus{}1} \PY{o}{=} \PY{n}{stats}\PY{o}{.}\PY{n}{t}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{tstatistic1\PYZus{}1}\PY{p}{,}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{2}
           
               \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval\PYZus{}0}\PY{p}{)}\PY{p}{)}
               \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p\PYZhy{}value for beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pval\PYZus{}1}\PY{p}{)}\PY{p}{)}
@@ -1389,7 +1626,7 @@ These are both statistically significant!
 using this function
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}351}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}152}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
           \PY{n}{calcpvalue}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted}\PY{p}{,}\PY{n}{beta1\PYZus{}0}\PY{p}{,}\PY{n}{beta1\PYZus{}1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
           
           \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
@@ -1402,7 +1639,7 @@ using this function
           \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
           
           \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{calcpvalue}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted}\PY{p}{,}\PY{n}{beta22\PYZus{}0}\PY{p}{,}\PY{n}{beta22\PYZus{}1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+          \PY{n}{calcpvalue}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{y22\PYZus{}fitted}\PY{p}{,}\PY{n}{beta22\PYZus{}0}\PY{p}{,}\PY{n}{beta22\PYZus{}1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
           
           \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
           \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
@@ -1417,7 +1654,7 @@ Model for Y\_1: Explanatory variable X for Y\_1
 SE(beta\_0) = 0.6406034056188337, SE(beta\_1) = 0.011151051418375258
 beta\_0 t-statistic = 8.587595814509644
 beta\_1 t-statistic = 454.150405635995
-p-value for beta\_0 = 1.685985282508196e-17
+p-value for beta\_0 = 3.371970565016392e-17
 p-value for beta\_1 = 0.0
 These are both statistically significant!
 
@@ -1426,17 +1663,17 @@ Model for Y\_2: Explanatory variable X for Y\_2
 SE(beta\_0) = 245.34955295438897, SE(beta\_1) = 4.2708256878947495
 beta\_0 t-statistic = -34.424274285888536
 beta\_1 t-statistic = 118.51588098729522
-p-value for beta\_0 = 4.062734353712651e-172
+p-value for beta\_0 = 8.125468707425302e-172
 p-value for beta\_1 = 0.0
 These are both statistically significant!
 
 
 Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
-SE(beta\_0) = 32.936149817301605, SE(beta\_1) = 0.5733230527884089
-beta\_0 t-statistic = 0.4393368148245055
-beta\_1 t-statistic = 8.851939503631746
-p-value for beta\_0 = 0.33025630512965964
-p-value for beta\_1 = 1.9265051090518403e-18
+SE(beta\_0) = 24.614546607361707, SE(beta\_1) = 0.005557804748590844
+beta\_0 t-statistic = 0.5878663289694033
+beta\_1 t-statistic = 913.1340896074505
+p-value for beta\_0 = 0.5567550098751695
+p-value for beta\_1 = 0.0
 Only beta\_1 is statistically significant!
 
 
@@ -1445,19 +1682,13 @@ SE(beta\_0) = 0.15212372264589394, SE(beta\_1) = 0.0026480337730023893
 beta\_0 t-statistic = 69.09601786545896
 beta\_1 t-statistic = -38.21657519695403
 p-value for beta\_0 = 0.0
-p-value for beta\_1 = 6.841386859358049e-198
+p-value for beta\_1 = 1.3682773718716098e-197
 These are both statistically significant!
 
     \end{Verbatim}
 
-    If we look at the plot for the second model, we see that our linear
-model estimates an intercept close to -10000. This is clearly not true.
-Additionally, the shape of the data is not well modelled either. It is
-not a surprise that some coefficients are statistically insignificant.
-Similarly with the first model for Y\_3
-
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}344}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}153}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
           \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
           \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
           \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -1467,24 +1698,30 @@ Similarly with the first model for Y\_3
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}344}]:} [<matplotlib.lines.Line2D at 0x299542ec1d0>]
+{\color{outcolor}Out[{\color{outcolor}153}]:} [<matplotlib.lines.Line2D at 0x21edee7fe80>]
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_65_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     We can use the statsmodels.api to verify our results
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}345}]:} \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
-          \PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k}{import} \PY{n}{stats}
+{\color{incolor}In [{\color{incolor}36}]:} \PY{k+kn}{import} \PY{n+nn}{statsmodels}\PY{n+nn}{.}\PY{n+nn}{api} \PY{k}{as} \PY{n+nn}{sm}
+         \PY{k+kn}{from} \PY{n+nn}{scipy} \PY{k}{import} \PY{n}{stats}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}370}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+C:\textbackslash{}Users\textbackslash{}HVAD\textbackslash{}Anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}statsmodels\textbackslash{}compat\textbackslash{}pandas.py:56: FutureWarning: The pandas.core.datetools module is deprecated and will be removed in a future version. Please use the pandas.tseries module instead.
+  from pandas.core import datetools
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}110}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
           
           \PY{c+c1}{\PYZsh{} add a column of ones to X}
           \PY{n}{X\PYZus{}new} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{X}\PY{p}{)}
@@ -1546,8 +1783,8 @@ Model for Y\_1: Explanatory variable X for Y\_1
 Dep. Variable:                      y   R-squared:                       0.995
 Model:                            OLS   Adj. R-squared:                  0.995
 Method:                 Least Squares   F-statistic:                 2.063e+05
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):               0.00
-Time:                        13:05:18   Log-Likelihood:                -3730.1
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        12:27:37   Log-Likelihood:                -3730.1
 No. Observations:                1000   AIC:                             7464.
 Df Residuals:                     998   BIC:                             7474.
 Df Model:                           1                                         
@@ -1574,8 +1811,8 @@ Model for Y\_2: Explanatory variable X for Y\_2
 Dep. Variable:                      y   R-squared:                       0.934
 Model:                            OLS   Adj. R-squared:                  0.934
 Method:                 Least Squares   F-statistic:                 1.405e+04
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):               0.00
-Time:                        13:05:18   Log-Likelihood:                -9678.1
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        12:27:37   Log-Likelihood:                -9678.1
 No. Observations:                1000   AIC:                         1.936e+04
 Df Residuals:                     998   BIC:                         1.937e+04
 Df Model:                           1                                         
@@ -1602,8 +1839,8 @@ Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
 Dep. Variable:                      y   R-squared:                       0.999
 Model:                            OLS   Adj. R-squared:                  0.999
 Method:                 Least Squares   F-statistic:                 8.338e+05
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):               0.00
-Time:                        13:05:18   Log-Likelihood:                -7670.0
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        12:27:37   Log-Likelihood:                -7670.0
 No. Observations:                1000   AIC:                         1.534e+04
 Df Residuals:                     998   BIC:                         1.535e+04
 Df Model:                           1                                         
@@ -1632,8 +1869,8 @@ Model for Y\_3: Explanatory variable X for Y\_3
 Dep. Variable:                      y   R-squared:                       0.594
 Model:                            OLS   Adj. R-squared:                  0.594
 Method:                 Least Squares   F-statistic:                     1461.
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):          1.37e-197
-Time:                        13:05:18   Log-Likelihood:                -2292.4
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):          1.37e-197
+Time:                        12:27:37   Log-Likelihood:                -2292.4
 No. Observations:                1000   AIC:                             4589.
 Df Residuals:                     998   BIC:                             4599.
 Df Model:                           1                                         
@@ -1660,8 +1897,8 @@ Model for Y\_3: Explanatory variables X,X\^{}2,X\^{}3 for Y\_3
 Dep. Variable:                      y   R-squared:                       0.923
 Model:                            OLS   Adj. R-squared:                  0.923
 Method:                 Least Squares   F-statistic:                     3974.
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):               0.00
-Time:                        13:05:18   Log-Likelihood:                -1461.8
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        12:27:37   Log-Likelihood:                -1461.8
 No. Observations:                1000   AIC:                             2932.
 Df Residuals:                     996   BIC:                             2951.
 Df Model:                           3                                         
@@ -1692,10 +1929,10 @@ variable X\^{}2 for Y\_2} is not statistically significant. The
 intercept can then be omitted from the model and fitted again.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}384}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{est} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
-          \PY{n}{est2} \PY{o}{=} \PY{n}{est}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{n}{est2}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}38}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{est} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{est2} \PY{o}{=} \PY{n}{est}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{est2}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1706,8 +1943,8 @@ Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
 Dep. Variable:                      y   R-squared:                       0.999
 Model:                            OLS   Adj. R-squared:                  0.999
 Method:                 Least Squares   F-statistic:                 1.878e+06
-Date:                Mon, 08 Oct 2018   Prob (F-statistic):               0.00
-Time:                        13:18:54   Log-Likelihood:                -7670.2
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        10:27:30   Log-Likelihood:                -7670.2
 No. Observations:                1000   AIC:                         1.534e+04
 Df Residuals:                     999   BIC:                         1.535e+04
 Df Model:                           1                                         
@@ -1731,24 +1968,24 @@ Warnings:
     This is a good fit also
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}385}]:} \PY{n}{x23} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
-          \PY{n}{y23} \PY{o}{=} \PY{n}{est2}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{*} \PY{n}{x23}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          
-          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
-          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x23}\PY{p}{,}\PY{n}{y23}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}39}]:} \PY{n}{x23} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+         \PY{n}{y23} \PY{o}{=} \PY{n}{est2}\PY{o}{.}\PY{n}{params}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{*} \PY{n}{x23}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         
+         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}2(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{x23}\PY{p}{,}\PY{n}{y23}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}385}]:} [<matplotlib.lines.Line2D at 0x29953b028d0>]
+{\color{outcolor}Out[{\color{outcolor}39}]:} [<matplotlib.lines.Line2D at 0x21ede581a90>]
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_65_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_72_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1762,13 +1999,13 @@ Using this equation, we can reproduce the statsmodels solution above.
 Note that removing \(\beta_0\) has changed \(\beta_1\) slightly:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}393}]:} \PY{c+c1}{\PYZsh{} remember that we are fitting the variable X\PYZca{}2}
-          \PY{n}{sum1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
-          \PY{n}{sum2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{4}\PY{p}{)}
-          
-          \PY{n}{beta23\PYZus{}1} \PY{o}{=} \PY{n}{sum1}\PY{o}{/}\PY{n}{sum2}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y \PYZti{} }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta23\PYZus{}1}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}40}]:} \PY{c+c1}{\PYZsh{} remember that we are fitting the variable X\PYZca{}2}
+         \PY{n}{sum1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{sum2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{4}\PY{p}{)}
+         
+         \PY{n}{beta23\PYZus{}1} \PY{o}{=} \PY{n}{sum1}\PY{o}{/}\PY{n}{sum2}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y \PYZti{} }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X\PYZca{}2}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta23\PYZus{}1}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1805,53 +2042,53 @@ numerator \textgreater{} Var(\(\epsilon\)))
 We can use this to calculate the F-Statistics of the above models:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}420}]:} \PY{k}{def} \PY{n+nf}{FStat}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{p}\PY{p}{,}\PY{n}{TSS}\PY{p}{,}\PY{n}{RSS}\PY{p}{)}\PY{p}{:}
-              \PY{n}{F} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{TSS}\PY{o}{\PYZhy{}}\PY{n}{RSS}\PY{p}{)}\PY{o}{/}\PY{n}{p}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{RSS}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{n}{p}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The F\PYZhy{}Statistic is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}41}]:} \PY{k}{def} \PY{n+nf}{FStat}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{p}\PY{p}{,}\PY{n}{TSS}\PY{p}{,}\PY{n}{RSS}\PY{p}{)}\PY{p}{:}
+             \PY{n}{F} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{TSS}\PY{o}{\PYZhy{}}\PY{n}{RSS}\PY{p}{)}\PY{o}{/}\PY{n}{p}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{RSS}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{n}{p}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The F\PYZhy{}Statistic is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}421}]:} \PY{c+c1}{\PYZsh{} we didn\PYZsq{}t calculate the last model ourselves, we used sklearn so we retrieve the coefficients}
-          \PY{n}{beta32\PYZus{}0} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-          \PY{n}{beta32\PYZus{}1} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-          \PY{n}{beta32\PYZus{}2} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
-          \PY{n}{beta32\PYZus{}3} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}
+{\color{incolor}In [{\color{incolor}42}]:} \PY{c+c1}{\PYZsh{} we didn\PYZsq{}t calculate the last model ourselves, we used sklearn so we retrieve the coefficients}
+         \PY{n}{beta32\PYZus{}0} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{beta32\PYZus{}1} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{beta32\PYZus{}2} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{n}{beta32\PYZus{}3} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}423}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}1}\PY{p}{,}\PY{n}{RSS\PYZus{}1}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{}re\PYZhy{}run the above for all the models}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}2}\PY{p}{,}\PY{n}{RSS\PYZus{}2}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}22}\PY{p}{,}\PY{n}{RSS\PYZus{}22}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}3}\PY{p}{,}\PY{n}{RSS\PYZus{}3}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{TSS\PYZus{}32}\PY{p}{,}\PY{n}{RSS\PYZus{}32} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y32\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variables X,X\PYZca{}2,X\PYZca{}3 for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          \PY{c+c1}{\PYZsh{} now we have 3 explanatory variables}
-          \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{TSS\PYZus{}32}\PY{p}{,}\PY{n}{RSS\PYZus{}32}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}43}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}1: Explanatory variable X for Y\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}1}\PY{p}{,}\PY{n}{RSS\PYZus{}1}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}re\PYZhy{}run the above for all the models}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}2}\PY{p}{,}\PY{n}{RSS\PYZus{}2}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}22}\PY{p}{,}\PY{n}{RSS\PYZus{}22}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variable X for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{TSS\PYZus{}3}\PY{p}{,}\PY{n}{RSS\PYZus{}3}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{TSS\PYZus{}32}\PY{p}{,}\PY{n}{RSS\PYZus{}32} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{y32\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}3: Explanatory variables X,X\PYZca{}2,X\PYZca{}3 for Y\PYZus{}3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} now we have 3 explanatory variables}
+         \PY{n}{FStat}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{n}{TSS\PYZus{}32}\PY{p}{,}\PY{n}{RSS\PYZus{}32}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1893,56 +2130,242 @@ Above, we ran a model for Y\_2 which had an intercept, coefficient of
 X\^{}2 and RSS of:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}479}]:} \PY{n}{beta22\PYZus{}0}\PY{p}{,} \PY{n}{beta22\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}22}
+{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{beta22\PYZus{}0}\PY{p}{,} \PY{n}{beta22\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}22}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}479}]:} (14.470063153316005, 5.075020979320466, 268902718.6114595)
+{\color{outcolor}Out[{\color{outcolor}44}]:} (14.470063153316005, 5.075020979320466, 268902718.6114595)
 \end{Verbatim}
             
-    We then attempted to fit a model to Y\_2 but this time without the
-intercept. The Coefficient of X\^{}2 and RSS for that model was
-calculated to be
+    Here, we are going to calculate the p-value of the intercept for Y\_2
+when we try to fit an intercept as well as \(X^2\). We do this by first
+fitting the full model including the intercept and getting the RSS
+value, then we fit the model without the intercept and get the RSS
+value. The Coefficient of X\^{}2 and RSS for the model without the
+intercept was calculated to be
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}481}]:} \PY{n}{TSS\PYZus{}23}\PY{p}{,}\PY{n}{RSS\PYZus{}23} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{beta23\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
-          \PY{n}{beta23\PYZus{}1}\PY{p}{,}\PY{n}{RSS\PYZus{}23}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}481}]:} (5.077455649665152, 268995834.0780044)
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}482}]:} \PY{k}{def} \PY{n+nf}{FStatCompare}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{p}\PY{p}{,}\PY{n}{q}\PY{p}{,}\PY{n}{RSS0}\PY{p}{,}\PY{n}{RSS}\PY{p}{)}\PY{p}{:}
-              \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
-          \PY{l+s+sd}{    A function to calculate the F\PYZhy{}Statistic when we are comparing models with different number of parameters.}
-          \PY{l+s+sd}{    RSS0 is a sub\PYZhy{}model of RSS}
-          \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
-              \PY{n}{F} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{RSS0}\PY{o}{\PYZhy{}}\PY{n}{RSS}\PY{p}{)}\PY{o}{/}\PY{n}{q}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{RSS}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{n}{p}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The F\PYZhy{}Statistic is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}58}]:} \PY{n}{TSS\PYZus{}23}\PY{p}{,}\PY{n}{RSS\PYZus{}23} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{beta23\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}1 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, RSS\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{beta23\PYZus{}1}\PY{p}{,}\PY{n}{RSS\PYZus{}23}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}497}]:} \PY{n}{Y23\PYZus{}fitted} \PY{o}{=} \PY{n}{beta23\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
-          \PY{n}{TSS\PYZus{}2\PYZus{}test}\PY{p}{,}\PY{n}{RSS\PYZus{}2\PYZus{}test} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{Y23\PYZus{}fitted}\PY{p}{)}
-          \PY{n}{FStatCompare}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{RSS\PYZus{}23}\PY{p}{,}\PY{n}{RSS\PYZus{}22}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} the following function calculated the area underneath the cdf F\PYZhy{}distribution with }
-          \PY{c+c1}{\PYZsh{}dfn(degrees of freedom in the numerator)=1, }
-          \PY{c+c1}{\PYZsh{}dfd(degrees of freedom in the denominator)=len(X)\PYZhy{}2 less than 0.5}
-          \PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The p\PYZhy{}value of the intercept is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{l+m+mf}{0.3459331001141355}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+beta\_1 = 5.077455649665152, RSS\_0 = 268995834.0780044
+
+    \end{Verbatim}
+
+    We now create a function to apply the formula shown above for
+calculating the F-Statistic for comparing models
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}75}]:} \PY{k}{def} \PY{n+nf}{FStatCompare}\PY{p}{(}\PY{n}{n}\PY{p}{,}\PY{n}{p}\PY{p}{,}\PY{n}{q}\PY{p}{,}\PY{n}{RSS0}\PY{p}{,}\PY{n}{RSS}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    A function to calculate the F\PYZhy{}Statistic when we are comparing models with different number of parameters.}
+         \PY{l+s+sd}{    RSS0 is a sub\PYZhy{}model of RSS}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+             \PY{n}{F} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{RSS0}\PY{o}{\PYZhy{}}\PY{n}{RSS}\PY{p}{)}\PY{o}{/}\PY{n}{q}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{RSS}\PY{o}{/}\PY{p}{(}\PY{n}{n}\PY{o}{\PYZhy{}}\PY{n}{p}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The F\PYZhy{}Statistic is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{F}\PY{p}{)}\PY{p}{)}
+             \PY{k}{return} \PY{n}{F}
+\end{Verbatim}
+
+
+    Now we can confirm the p-value for the intercept
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}77}]:} \PY{c+c1}{\PYZsh{} This is the fitted values for the model with no intercept}
+         \PY{n}{Y23\PYZus{}fitted} \PY{o}{=} \PY{n}{beta23\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+         
+         \PY{c+c1}{\PYZsh{} These are the TSS and RSS for this model with no intercept}
+         \PY{n}{TSS\PYZus{}2\PYZus{}test}\PY{p}{,}\PY{n}{RSS\PYZus{}2\PYZus{}test} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{Y23\PYZus{}fitted}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} RSS\PYZus{}22 is the RSS for the model with the intercept. RSS\PYZus{}23 is the RSS}
+         \PY{c+c1}{\PYZsh{} for the model without the intercept. We have p = 0 and q = 1 (i.e. we have }
+         \PY{c+c1}{\PYZsh{} removed 1 parameter but there was only 1 parameter to begin with)}
+         \PY{n}{F} \PY{o}{=} \PY{n}{FStatCompare}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{RSS\PYZus{}23}\PY{p}{,}\PY{n}{RSS\PYZus{}22}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} the following function calculates the area underneath the cdf F\PYZhy{}distribution with }
+         \PY{c+c1}{\PYZsh{}dfn(degrees of freedom in the numerator)=1, }
+         \PY{c+c1}{\PYZsh{}dfd(degrees of freedom in the denominator)=len(X)\PYZhy{}2 less than 0.5}
+         \PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The p\PYZhy{}value of the intercept is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{F}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
 The F-Statistic is 0.3459331001141355
 The p-value of the intercept is 0.5565574505496756
+
+    \end{Verbatim}
+
+    Note that above, we removed the intercept and used the F-Statistic to
+calculate the p-value for the intercept. We can also remove the
+coefficient of X\^{}2 and calculate the p-value of this coefficient
+using the same procedure as above. First fit the model as we have done
+before
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}69}]:} \PY{n}{lmOnlyIntercept} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         \PY{n}{lmOnlyIntercept}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{(}\PY{n}{X}\PY{o}{*}\PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{Y\PYZus{}2}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: No explanatory variable for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lmOnlyIntercept}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+         \PY{n}{yOnlyIntercept\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lmOnlyIntercept}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{X}\PY{o}{*}\PY{l+m+mi}{0}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{R\PYZca{}2 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r2\PYZus{}score}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{yOnlyIntercept\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Model for Y\_2: No explanatory variable for Y\_2
+beta\_0 = 16763.308428792458
+R\^{}2 = 0.0
+
+    \end{Verbatim}
+
+    Next, calculate the RSS for this model we have just fitted
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}74}]:} \PY{n}{TSS\PYZus{}OnlyIntercept}\PY{p}{,}\PY{n}{RSS\PYZus{}OnlyIntercept} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{yOnlyIntercept\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{beta\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{, RSS\PYZus{}0 = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lmOnlyIntercept}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{RSS\PYZus{}OnlyIntercept}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+beta\_0 = 16763.308428792458, RSS\_0 = 224933046282.3772
+
+    \end{Verbatim}
+
+    And now we calculate the p-value of the coefficient of X\^{}2
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}154}]:} \PY{c+c1}{\PYZsh{} These are the TSS and RSS for this model with only intercept}
+          \PY{n}{TSS\PYZus{}2\PYZus{}test}\PY{p}{,}\PY{n}{RSS\PYZus{}2\PYZus{}test} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{,}\PY{n}{yOnlyIntercept\PYZus{}fitted\PYZus{}sklearn}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} RSS\PYZus{}22 is the RSS for the model with the intercept. RSS\PYZus{}23 is the RSS}
+          \PY{c+c1}{\PYZsh{} for the model without the intercept. We have p = 0 and q = 1 (i.e. we have }
+          \PY{c+c1}{\PYZsh{} removed 1 parameter but there was only 1 parameter to begin with)}
+          \PY{n}{F} \PY{o}{=} \PY{n}{FStatCompare}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{RSS\PYZus{}2\PYZus{}test}\PY{p}{,}\PY{n}{RSS\PYZus{}22}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} the following function calculates the area underneath the cdf F\PYZhy{}distribution with }
+          \PY{c+c1}{\PYZsh{}dfn(degrees of freedom in the numerator)=1, }
+          \PY{c+c1}{\PYZsh{}dfd(degrees of freedom in the denominator)=len(X)\PYZhy{}2 less than 0.5}
+          \PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}
+          
+          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The p\PYZhy{}value of the X\PYZca{}2 coefficient is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{\PYZhy{}}\PY{n}{stats}\PY{o}{.}\PY{n}{f}\PY{o}{.}\PY{n}{cdf}\PY{p}{(}\PY{n}{F}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The F-Statistic is 834649.3504385022
+The p-value of the X\^{}2 coefficient is 1.1102230246251565e-16
+
+    \end{Verbatim}
+
+    \subsubsection{Synergy Effect}\label{synergy-effect}
+
+Suppose we havethe following function
+
+\[f(x)=4.67+2*X_1+3*X_2+5.07∗X_1*X_2\]
+
+We can see that there is a mixed term '\(X_1 X_2\)'. This is called a
+synergy effect.
+
+Let's define this function and plot it
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}216}]:} \PY{k+kn}{from} \PY{n+nn}{mpl\PYZus{}toolkits}\PY{n+nn}{.}\PY{n+nn}{mplot3d} \PY{k}{import} \PY{n}{Axes3D}
+          
+          \PY{c+c1}{\PYZsh{}f(x)=4.67+2*X\PYZus{}1+3*X\PYZus{}2+5.07∗X\PYZus{}1*X\PYZus{}2}
+          \PY{k}{def} \PY{n+nf}{f}\PY{p}{(}\PY{n}{x1}\PY{p}{,}\PY{n}{x2}\PY{p}{)}\PY{p}{:}
+              \PY{k}{return} \PY{l+m+mf}{4.67}\PY{o}{+}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x1}\PY{o}{+}\PY{l+m+mi}{30}\PY{o}{*}\PY{n}{x2}\PY{o}{+}\PY{l+m+mf}{5.07}\PY{o}{*}\PY{n}{x1}\PY{o}{*}\PY{n}{x2}
+          \PY{c+c1}{\PYZsh{} Set the seed}
+          \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
+          \PY{n}{X\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+          \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{20}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0}
+          \PY{n}{E} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{}Response variables}
+          \PY{n}{Y} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f}\PY{p}{,}\PY{n}{X\PYZus{}1}\PY{p}{,}\PY{n}{X\PYZus{}2}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E}
+          
+          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{,}\PY{l+m+mf}{0.8}\PY{p}{]}\PY{p}{)}
+          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{,}\PY{n}{Y}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}216}]:} Text(0,0.5,'f(x)')
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_94_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}217}]:} \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+          \PY{n}{ax} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{,} \PY{n}{projection}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+          \PY{n}{ax}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}1}\PY{p}{,} \PY{n}{X\PYZus{}2}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+          \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}zlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+          \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_95_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}221}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model for Y\PYZus{}2: Explanatory variable X\PYZca{}2 for Y\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{X\PYZus{}new} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{add\PYZus{}constant}\PY{p}{(}\PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X\PYZus{}1}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X\PYZus{}1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X\PYZus{}2}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X\PYZus{}2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X\PYZus{}1}\PY{o}{*}\PY{n}{X\PYZus{}2}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X\PYZus{}12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+          \PY{n}{est} \PY{o}{=} \PY{n}{sm}\PY{o}{.}\PY{n}{OLS}\PY{p}{(}\PY{n}{Y}\PY{p}{,} \PY{n}{X\PYZus{}new}\PY{p}{)}
+          \PY{n}{est2} \PY{o}{=} \PY{n}{est}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{p}{)}
+          \PY{n+nb}{print}\PY{p}{(}\PY{n}{est2}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.644e+07
+Date:                Wed, 17 Oct 2018   Prob (F-statistic):               0.00
+Time:                        13:13:06   Log-Likelihood:                -3749.9
+No. Observations:                1000   AIC:                             7508.
+Df Residuals:                     996   BIC:                             7527.
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          5.9956      1.316      4.554      0.000       3.412       8.579
+X\_1            2.0091      0.023     87.005      0.000       1.964       2.054
+X\_2           30.0329      0.112    267.704      0.000      29.813      30.253
+X\_12           5.0714      0.002   2571.540      0.000       5.068       5.075
+==============================================================================
+Omnibus:                        8.045   Durbin-Watson:                   2.015
+Prob(Omnibus):                  0.018   Jarque-Bera (JB):               11.082
+Skew:                           0.035   Prob(JB):                      0.00392
+Kurtosis:                       3.511   Cond. No.                     2.69e+03
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.69e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
 
     \end{Verbatim}
 
