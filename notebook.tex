@@ -322,7 +322,7 @@ properties) including their sales price.
 First we import the required libraries
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} Import modules}
+{\color{incolor}In [{\color{incolor}1}]:} \PY{c+c1}{\PYZsh{} Import modules}
         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
@@ -337,7 +337,7 @@ First we import the required libraries
     Then we import the datasets
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{c+c1}{\PYZsh{} Import Advertising dataset (http://www\PYZhy{}bcf.usc.edu/\PYZti{}gareth/ISL/data.html)}
+{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} Import Advertising dataset (http://www\PYZhy{}bcf.usc.edu/\PYZti{}gareth/ISL/data.html)}
         \PY{n}{advert} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
         
         \PY{c+c1}{\PYZsh{} Import House Prices dataset \PYZhy{} Only quantitative fields and cleaned (https://www.kaggle.com/c/house\PYZhy{}prices\PYZhy{}advanced\PYZhy{}regression\PYZhy{}techniques/data)}
@@ -346,7 +346,7 @@ First we import the required libraries
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
@@ -374,7 +374,7 @@ Advertising.csv
 
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}5}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HousePrice.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
@@ -429,7 +429,7 @@ predictor variables are "TV", "radio" and "newspaper". We can produce a
 pairplot of the data below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{ax} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{pairplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}5}]:} \PY{n}{ax} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{pairplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -445,12 +445,12 @@ and radio seem to have a slight positive correlation also. We can see
 this in the correlation matrix below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{advert}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{advert}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}7}]:}                  TV     radio  newspaper     sales
+{\color{outcolor}Out[{\color{outcolor}6}]:}                  TV     radio  newspaper     sales
         TV         1.000000  0.054809   0.056648  0.782224
         radio      0.054809  1.000000   0.354104  0.576223
         newspaper  0.056648  0.354104   1.000000  0.228299
@@ -498,7 +498,7 @@ In summary, we are looking for a straight line to fit to the following
 data points as well as possible:
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}8}]:} \PY{c+c1}{\PYZsh{} Get the figure handle and set figure size}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{} Get the figure handle and set figure size}
         \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
         
         \PY{c+c1}{\PYZsh{} Get the axis}
@@ -624,32 +624,33 @@ fit. The three functions are chosen as:
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} Set the seed}
-        \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{} Choose 1000 random observations for x between 0 and 100}
-        \PY{n}{X} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0}
-        \PY{n}{E\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}Error term with sigma = 500, mu = 0}
-        \PY{n}{E\PYZus{}2} \PY{o}{=} \PY{l+m+mi}{500}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}Error term with sigma = 19, mu = 0}
-        \PY{n}{E\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-        
-        \PY{c+c1}{\PYZsh{}Response variables}
-        \PY{n}{Y\PYZus{}1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}1}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}1}
-        \PY{n}{Y\PYZus{}2} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}2}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}2}
-        \PY{n}{Y\PYZus{}3} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}3}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}3}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Set the seed}
+         \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Choose 1000 random observations for x between 0 and 100}
+         \PY{n}{X} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0, randn samples from the standard normal distribution}
+         \PY{n}{E\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}Error term with sigma = 500, mu = 0}
+         \PY{n}{E\PYZus{}2} \PY{o}{=} \PY{l+m+mi}{500}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}Error term with sigma = 19, mu = 0}
+         \PY{n}{E\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{}Response variables}
+         \PY{n}{Y\PYZus{}1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}1}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}1}
+         \PY{n}{Y\PYZus{}2} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}2}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}2}
+         \PY{n}{Y\PYZus{}3} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}3}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}3}
 \end{Verbatim}
 
 
-    First we look at what \(f_1\) looks like
+    In the above, \emph{s \(\times\) r.randn(n)} samples n points from the
+\(N(0,s^2)\) distribution. First we look at what \(f_1\) looks like
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Plot}
+{\color{incolor}In [{\color{incolor}11}]:} \PY{c+c1}{\PYZsh{} Plot}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -678,8 +679,10 @@ and
 
 \[\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}\]
 
+We can calculate these as below
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
+{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
          \PY{n}{x\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}
          
@@ -710,7 +713,7 @@ Y = 5.50124312485292 + 5.064254524922961 * X
 for \(f_1\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} The equation using the betas above}
@@ -738,14 +741,15 @@ for \(f_1\)
     \end{center}
     { \hspace*{\fill} \\}
     
-    Let's see what the residuals look like by plotting them. The residual
-require the knowledge of the actual response variables. So we use the
+    Let's see what the residuals look like by plotting them. The residuals
+require the knowledge of the actual response variables so that we can
+compare that with the predicted response variables. So we use the
 regression line above to predict the response variable using the
 observed predictor variables. Then we plot them using a histogram to
 gain some insight into their distribution
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}14}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y1\PYZus{}fitted} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -786,12 +790,13 @@ good choice. In fact, the standard deviation for the residuals was
 roughly equal to the standard deviation for the error term when we
 constructed the function \(f_1\). A model may suffer from two types of
 error: error due to a discrepancy between the chosen function shape
-(here a linear model) and the true function shape (reducible); error due
-to random noise (irreducible). We can see here that the residuals are
-from irreducible error. Now let's do the same for f\_2.
+(here a linear model) and the true function shape (this is the reducible
+error); error due to random noise (this is the irreducible error). We
+can see here that the residuals are from irreducible error. Now let's do
+the same for f\_2.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+{\color{incolor}In [{\color{incolor}15}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
@@ -808,7 +813,7 @@ from irreducible error. Now let's do the same for f\_2.
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}14}]:} Text(0.5,1,'Scatter plot of f\_2')
+{\color{outcolor}Out[{\color{outcolor}15}]:} Text(0.5,1,'Scatter plot of f\_2')
 \end{Verbatim}
             
     \begin{center}
@@ -817,7 +822,7 @@ from irreducible error. Now let's do the same for f\_2.
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
+{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
          \PY{n}{x\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
          
@@ -847,7 +852,7 @@ Y = -8445.98030682202 + 506.16066894401735 * X
 for \(f_2\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} The predicted responses of these 1000 numbers}
@@ -873,8 +878,10 @@ for \(f_2\)
     \end{center}
     { \hspace*{\fill} \\}
     
+    We can then look at the residuals plot as we did before
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}18}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y2\PYZus{}fitted} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -899,7 +906,7 @@ for \(f_2\)
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -908,10 +915,13 @@ The residuals are certainly not from a normal distribution
 
     \end{Verbatim}
 
-    So let's try \(X^2\) as a parameter instead of \(X\) in our linear model
+    This shows that the linear model we have chose may not be a good choice.
+So let's try \(X^2\) as a parameter instead of \(X\) in our linear
+model. This way, we are transforming an existing parameter to form a new
+parameter.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{c+c1}{\PYZsh{} Create X\PYZca{}2 parameter}
+{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} Create X\PYZca{}2 parameter}
          \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
          
          \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
@@ -944,7 +954,7 @@ Y = 14.470063153316005 + 5.075020979320466 * X\^{}2
 data for \(f_2\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Predicted responses to the 1000 numbers}
@@ -965,16 +975,17 @@ data for \(f_2\)
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_35_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_36_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    Now we investigate the residuals to see if the new regression fit using
-\(X^2\) as a parameter yields residuals that look more normally
-distributed
+    We see a much better fit. Now we investigate the residuals to see if the
+new regression fit using \(X^2\) as a parameter yields residuals that
+look more normally distributed as has been assumed by the model
+architecture
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}21}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y22\PYZus{}fitted} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -999,7 +1010,7 @@ distributed
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_37_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1009,8 +1020,8 @@ This is roughly a normal distribution with mean -1.1250449460931123e-12 and stan
     \end{Verbatim}
 
     This shows that we can transform an independent variable and apply
-linear regression in order to regress the response variable onto the
-transformed Explanatory variable. This increases the power of linear
+linear regression in order to \emph{regress} the response variable onto
+the transformed explanatory variable. This increases the power of linear
 regression techniques. Note also that the standard deviation from the
 residual distribution is close to the 500 for the errors when the
 function was created.
@@ -1018,7 +1029,7 @@ function was created.
 Now let's apply linear regression to f\_3 in a similar manner
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
@@ -1037,7 +1048,7 @@ Now let's apply linear regression to f\_3 in a similar manner
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_39_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_40_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1048,7 +1059,7 @@ show that the results can be misleading when we only consider the
 residuals plot to assess the quality of fit
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
          \PY{n}{x\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}
          
@@ -1075,7 +1086,7 @@ Y = 10.511143457700811 + -0.1011987818100197 * X
 for \(f_3\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} Predict the response for those numbers}
@@ -1097,14 +1108,14 @@ for \(f_3\)
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_43_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_44_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     We now assess the residuals
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y3\PYZus{}fitted} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -1128,7 +1139,7 @@ for \(f_3\)
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1137,13 +1148,15 @@ This not a normal distribution but it is not that far off.
 
     \end{Verbatim}
 
-    Even though a plot of the residuals does not show a clear divergence
-from a normal distribution, it is clear from the predicted-observed plot
-that this is not a good model and does not fit the data in a
-satisfactory manner. We therefore need additional tools in order to
-asses the level of fit.
+    \paragraph{\texorpdfstring{\(R^2\)-Statistic}{R\^{}2-Statistic}}\label{r2-statistic}
 
-A metric we can use in order to assess the accuracy of the fit is the
+Even though a plot of the residuals above does not show a clear
+divergence from a normal distribution, it is clear from the
+predicted-observed plot that this is not a good model and does not fit
+the data in a satisfactory manner. We therefore need additional tools in
+order to asses the level of fit.
+
+A metric we can use in order to assess the goodness of the fit is the
 \emph{R-Squared} (\(R^2\)) statistic. The \(R^2\) statistic measures the
 percentage of variability of the response variable that is explained by
 the explanatory variable. This is mathematically expressed as:
@@ -1170,7 +1183,7 @@ which is easily extended to multiple regression.
 Below, we calculate this metric for \(f_3\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} TSS}
+{\color{incolor}In [{\color{incolor}26}]:} \PY{c+c1}{\PYZsh{} TSS}
          \PY{n}{TSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
          
          \PY{c+c1}{\PYZsh{} RSS}
@@ -1197,7 +1210,7 @@ above. To do this, we create a function that accepts observed and fitted
 values and returns the TSS and RSS of the fit
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}27}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
              \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
          \PY{l+s+sd}{    A function that calculates the TSS and RSS of a fit given observed }
          \PY{l+s+sd}{        and fitted values}
@@ -1223,8 +1236,10 @@ values and returns the TSS and RSS of the fit
 \end{Verbatim}
 
 
+    Then we apply this function to the three fitted models
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}1}
+{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}1}
          \PY{n}{TSS\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}1} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the fit to f\PYZus{}1}
@@ -1283,12 +1298,13 @@ We can try combinations of \(X\), \(X^2\), \(X^3\) as well. We do this
 after we have introduced a much simpler way of obtaining the above fits
 using Scikit-Learn packages.
 
-Below, we use sklearn.linear\_model.LinearRegression() in order to fit
-and sklearn.metrics.r2\_score() in order to calculate the \(R^2\)
-statistic. We will see that the results match the manual results above
+Below, we use \emph{sklearn.linear\_model.LinearRegression()} in order
+to fit and \emph{sklearn.metrics.r2\_score()} in order to calculate the
+\(R^2\) statistic. We will see that the results match the manual results
+above
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Import the linear model and the metric we\PYZsq{}ll be using}
+{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{} Import the linear model and the metric we\PYZsq{}ll be using}
          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{r2\PYZus{}score}
          
@@ -1407,7 +1423,7 @@ we have created. We can plot the model to see how well it follows the
 response variable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PYZbs{}
              \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
@@ -1422,21 +1438,21 @@ response variable.
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f\PYZus{}3(x)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the data and the model using X,X\PYZca{}2 and X\PYZca{}3 as }\PY{l+s+se}{\PYZbs{}}
-         \PY{l+s+s1}{                predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{l+s+s1}{predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_54_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     We can also check the residuals plot
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} Calculate the fitted values using the observed values}
+{\color{incolor}In [{\color{incolor}33}]:} \PY{c+c1}{\PYZsh{} Calculate the fitted values using the observed values}
          \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PYZbs{}
                              \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
          
@@ -1462,7 +1478,7 @@ response variable.
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1474,7 +1490,7 @@ This is roughly a normal distribution with mean -1.7408297026122454e-15 and
 
     It is not a surprise that we were able to fit a function of the form
 \(f(x) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3\). Using taylor
-expansion, \(f(x) = sin(x)\) estimated around the point \(x=0\) as
+expansion, \(f(x) = sin(x)\) estimated around the point \(x=0\) is
 
 \[f(x=0) = f(0) + f^{(1)}(0)x + f^{(2)}(0)x^2/(2!) + f^{(3)}(0)x^3/(3!) + O(x^4)\]
 \[= \sin(0) + \cos(0)x - \sin(0)x^2/(2!) -\cos(0)x^3/(3!)\]
@@ -1489,7 +1505,7 @@ Let's plot this along with the above for smaller values of X for which
 this approximation of sin(x) is acceptable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}34}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} Predictions}
@@ -1527,7 +1543,7 @@ this approximation of sin(x) is acceptable.
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_60_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1544,7 +1560,7 @@ against
 For the first model we have the fitted model
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}32}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}35}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1788,7 +1804,7 @@ These are both statistically significant!
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_66_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_68_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -2073,7 +2089,7 @@ Warnings:
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_73_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_75_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -2396,7 +2412,7 @@ Let's define this function and plot it
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_95_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_97_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -2415,7 +2431,7 @@ Let's define this function and plot it
 
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_96_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_98_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -2739,7 +2755,7 @@ C:\textbackslash{}Users\textbackslash{}HVAD\textbackslash{}Anaconda3\textbacksla
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_110_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_112_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -2810,7 +2826,7 @@ Validation (LOOCV). We do that below.
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_112_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_114_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -3010,7 +3026,7 @@ The actual MSE on this data set is : 6046571007.118181
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_119_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_121_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -3093,7 +3109,7 @@ The actual MSE on this data set is : 4587675012.9899845
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_120_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_122_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -3401,6 +3417,75 @@ predictors (\(p\) predictors), the above becomes
 \[\max_{\beta} l(\beta) = \min_{\beta} \left( \sum_{i=1}^n \left[y_i - \left(\beta_0 + \sum_{j=1}^p \beta_j x_{ij} \right) \right]^2 \right) = \min_{\beta} RSS\]
 
 where \(x_{ij}\) is the \(j^{th}\) predictor for observation \(i\).
+
+    \subsubsection{\texorpdfstring{A3 - The mean point
+(\(\bar{X}\),\(\bar{Y}\)) lies on the linear regression
+line}{A3 - The mean point (\textbackslash{}bar\{X\},\textbackslash{}bar\{Y\}) lies on the linear regression line}}\label{a3---the-mean-point-barxbary-lies-on-the-linear-regression-line}
+
+Let's assume that the random variable that represents the response be
+assumed to be linearly dependent on the predictors:
+
+\[Y = \beta_0 + \beta_1 X + \epsilon\]
+
+We approximate the coefficients using the data we have observed:
+
+\[\hat{Y} = \hat{\beta_0} + \hat{\beta_1} X\]
+
+taking the expectation of both sides of the above equations (Note that
+it is assumed that \(\beta_i\) and \(\hat{\beta}_i\)) are constant and
+determined such that they satisfy the line of best fit:
+
+\[\mu_Y = E[Y] = E[\beta_0 + \beta_1 X + \epsilon] = E[\beta_0] + E[\beta_1 X] + E[\epsilon] = \beta_0 + \beta_1 E[X] + 0 = \beta_0 + \beta_1 \mu_X\]
+
+\[\mu_{\hat{Y}} = E[\hat{Y}] = E[\hat{\beta_0} + \hat{\beta_1} X] = E[\hat{\beta_0}] + E[\hat{\beta_1} X] = \hat{\beta_0} + \hat{\beta_1} E[X] + 0 = \hat{\beta_0} + \hat{\beta_1} \mu_{\hat{X}}\]
+
+The first equation above says that if we assume the linear model, then
+the population means \((\mu_X,\mu_Y)\) must be a solution to this model.
+The second equation says that the point
+\((\mu_{\hat{X}},\mu_{\hat{Y}})\) must lie on any linear model we fit to
+the data regardless of the coefficients we have chosen. Now the sample
+means are easily obtained and have the exact equality below:
+
+\[\mu_{\hat{Y}} = \bar{Y}\] \[\mu_{\hat{X}} = \bar{X}\]
+
+This result also holds when \(\boldsymbol{X}\) is a vector of
+predictors.
+
+    \subsubsection{\texorpdfstring{A4 - For a single predictor,
+\(R^2 = Cor(X,Y)^2\)}{A4 - For a single predictor, R\^{}2 = Cor(X,Y)\^{}2}}\label{a4---for-a-single-predictor-r2-corxy2}
+
+We start with the definition of \(R^2\):
+
+\[R^2 = \frac{ TSS - RSS }{ RSS }\]
+
+Using \(TSS = \sum_{i=1}^n (y_i - \bar{y})^2\) and
+\(RSS = \sum_{i=1}^n (y_i - \hat{y})^2\)
+
+\[R^2 = \frac{ \sum_{i=1}^n (y_i - \bar{y})^2 - \sum_{i=1}^n (y_i - \hat{y})^2 }{ \sum_{i=1}^n (y_i - \hat{y})^2 } = \frac{ \sum_{i=1}^n [ (y_i - \bar{y}) - (y_i - \hat{y}) ][ (y_i - \bar{y}) + (y_i - \hat{y}) ] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+\[= \frac{ \sum_{i=1}^n [ (y_i - \bar{y}) - (y_i - \hat{y}) ][ (y_i - \bar{y}) + (y_i - \hat{y}) ] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+Using \(\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x}\) and
+\(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i = \bar{y} - \hat{\beta}_1 \bar{x} + \hat{\beta}_1 x_i = \bar{y} -\hat{\beta}_1(\bar{x} - x_i)\)
+
+\[R^2= \frac{ \sum_{i=1}^n [ (y_i - \bar{y}) - (y_i - \bar{y} -\hat{\beta}_1(\bar{x} - x_i)) ][ (y_i - \bar{y}) + (y_i - \bar{y} -\hat{\beta}_1(\bar{x} - x_i)) ] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+\[= \frac{ \sum_{i=1}^n [ \hat{\beta}_1(\bar{x} - x_i) ][ 2(y_i - \bar{y}) -\hat{\beta}_1(\bar{x} - x_i) ] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+\[= \frac{ \hat{\beta}_1 \left[ 2 \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) - \hat{\beta}_1\sum_{i=1}^n (\bar{x} - x_i)^2 \right] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+Using
+\(\hat{\beta}_1 = \frac{ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) }{ \sum_{i=1}^n (x_i - \bar{x})^2 }\)
+
+\[R^2 = \frac{ \hat{\beta}_1 \left[ 2 \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) - \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) \right] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+\[= \frac{ \hat{\beta}_1 \left[ \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) \right] }{ \sum_{i=1}^n (y_i - \bar{y})^2 }\]
+
+\[= \frac{ \left[ \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) \right]^2 }{ \sum_{i=1}^n (y_i - \bar{y})^2 \sum_{i=1}^n (x_i - \bar{x})^2 }\]
+
+\[= \frac{ \left[ \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) \right]^2 }{ \left[ \sqrt{ \sum_{i=1}^n (y_i - \bar{y})^2 \sum_{i=1}^n (x_i - \bar{x})^2} \right]^2}\]
+
+\[= corr(X,Y)^2\]
 
 
     % Add a bibliography block to the postdoc
