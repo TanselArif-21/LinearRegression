@@ -295,29 +295,48 @@ to investigate it in light of a dataset.
 
     \subsection{1 - Description}\label{description}
 
-Linear regression on \(p\) variables focusses on fitting a straight line
-in \(p\)-dimensions that passes as close as possible to the data points
+Linear regression examines the relationaship between a dependent
+variable and one or more independent variables. Linear regression with
+\(p\) independent variables focusses on fitting a straight line in
+\(p+1\)-dimensions that passes as close as possible to the data points
 in order to reduce error.
 
-General Characteristics: - A supervised learning technique - Useful for
-predicting a quantitative response - Linear Regression attempts to fit a
-function to predict a response variable - The problem is reduced to a
-paramteric problem of finding a set of parameters - The function shape
-is limited (as a function of the parameters)
+General Characteristics:
+
+\begin{itemize}
+\tightlist
+\item
+  A supervised learning technique
+\item
+  Useful for predicting a quantitative response
+\item
+  Linear Regression attempts to fit a function to predict a response
+  variable
+\item
+  The problem is reduced to a parametric problem of finding a set of
+  parameters
+\item
+  The function shape is limited (as a function of the parameters)
+\end{itemize}
 
     \subsection{2- Advertising and Housing
 Datasets}\label{advertising-and-housing-datasets}
 
-The Advertising dataset is obtained from
+Here we will use two datasets in order to get a feel of what Linear
+Regression is capable of.
+
+First we use the Advertising dataset which is obtained from
 http://www-bcf.usc.edu/\textasciitilde{}gareth/ISL/data.html and
 contains 200 datapoints of sales of a particular product, and TV,
 newspaper and radio advertising budgets (all figures are in units of
-\$1,000s).
+\$1,000s). We will predict sales of a product given its advertising
+budgets.
 
-The HousePrice dataset is obtained from
+Then we use the HousePrice dataset which is obtained from
 https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data
 and contains 1460 houses along many properties (only quantitative
-properties) including their sales price.
+properties) including their sales price. We will preduct the sale price
+of a property given certain parameters that characterise it.
 
 First we import the required libraries
 
@@ -346,8 +365,8 @@ First we import the required libraries
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) in advertising file =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) in advertising file =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{advert}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Advertising.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
         \PY{n}{display}\PY{p}{(}\PY{n}{advert}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}\PY{p}{)}
@@ -355,8 +374,8 @@ First we import the required libraries
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Number of observations (n) = 200
-Number of predictor variables (p) = 3
+Number of observations (n) in advertising file = 200
+Number of predictor variables (p) in advertising file = 3
 
 Advertising.csv
 
@@ -374,8 +393,8 @@ Advertising.csv
 
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of observations (n) in house\PYZhy{}prices file =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of predictor variables (p) in house\PYZhy{}prices file =}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{p}{)}
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HousePrice.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
         \PY{n}{display}\PY{p}{(}\PY{n}{housePrice}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}\PY{p}{)}
@@ -383,8 +402,8 @@ Advertising.csv
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-Number of observations (n) = 1460
-Number of predictor variables (p) = 34
+Number of observations (n) in house-prices file = 1460
+Number of predictor variables (p) in house-prices file = 34
 
 HousePrice.csv
 
@@ -425,8 +444,9 @@ HousePrice.csv
 
     
     For the Advertising dataset the response variable is "sales". The
-predictor variables are "TV", "radio" and "newspaper". We can produce a
-pairplot of the data below.
+predictor variables are "TV", "radio" and "newspaper". It's useful to
+visually inspect the data and see how each variable relates to the
+others. Using seaborn we can produce a pairplot of the data seen below:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}5}]:} \PY{n}{ax} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{pairplot}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{advert}\PY{p}{)}
@@ -441,8 +461,13 @@ pairplot of the data below.
     By looking at a pairplot to see the simple relationships between the
 variables, we see a strong positive correlation between sales and TV. A
 similar relationship between sales and radio is also observed. Newspaper
-and radio seem to have a slight positive correlation also. We can see
-this in the correlation matrix below.
+and radio seem to have a slight positive correlation also. We can use
+the Pearson correlation given by:
+
+\[corr=\frac{Cov(X,Y)}{\sigma_{X}\sigma_{Y}}\]
+
+where \(X\) and \(Y\) are random variables to examine the correlations
+between the parameters as seen in the correlation matrix below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}6}]:} \PY{n}{advert}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
@@ -549,19 +574,17 @@ Then setting these to zero and solving
 
 \[\implies \hat{\beta}_1 = \frac{n \bar{y} \bar{x} - \sum_{i=1}^n y_i x_i}{n \bar{x}^2 - \sum_{i=1}^n x_i^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} = \frac{\sum_{i=1}^n y_i x_i - n \bar{y} \bar{x} - n \bar{y} \bar{x} + n\bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - n \bar{x}^2 -n\bar{x}^2 + n\bar{x}^2}\]
 
-\[= \frac{\sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \bar{x} - \sum_{i=1}^n x_i \bar{y}  + \sum_{i=1}^n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - \sum_{i=1}^n x_i \bar{x} - \sum_{i=1}^n x_i \bar{x} + \sum_{i=1}^n \bar{x}^2}\]
+\[= \frac{\sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \bar{x} - \sum_{i=1}^n x_i \bar{y}  + \sum_{i=1}^n \bar{y} \bar{x}}{\sum_{i=1}^n x_i^2 - \sum_{i=1}^n x_i \bar{x} - \sum_{i=1}^n x_i \bar{x} + \sum_{i=1}^n \bar{x}^2},\]
 
-Where, in the penultimate line we completed the square and in the last
-equality we used
+where we used
 \(n\bar{y} \bar{x} = \sum_{i=1}^n y_i \bar{x} = \sum_{i=1}^n x_i \bar{y}\)
 and \(n\bar{x}^2 = n\bar{x} \bar{x} = \sum_{i=1}^n x_i \bar{x}\).
 Factorising
 
 \[\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}\]
 
-Additionally, the point \((\bar{x},\bar{y})\) lies on this line where
-\(\bar{x} = \sum_{i=1}^n x_i\) and \(\bar{y} = \sum_{i=1}^n y_i\) (see
-Appendix).
+Additionally, we can show that the point \((\bar{x},\bar{y})\) lies on
+the regression line (see Appendix).
 
 We have now found the values of \((\hat{\beta}_0,\hat{\beta}_1)\) which
 corresponds to the extrema of RSS. We will still need to show that this
@@ -624,25 +647,25 @@ fit. The three functions are chosen as:
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Set the seed}
-         \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Choose 1000 random observations for x between 0 and 100}
-         \PY{n}{X} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0, randn samples from the standard normal distribution}
-         \PY{n}{E\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{}Error term with sigma = 500, mu = 0}
-         \PY{n}{E\PYZus{}2} \PY{o}{=} \PY{l+m+mi}{500}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{}Error term with sigma = 19, mu = 0}
-         \PY{n}{E\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{}Response variables}
-         \PY{n}{Y\PYZus{}1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}1}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}1}
-         \PY{n}{Y\PYZus{}2} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}2}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}2}
-         \PY{n}{Y\PYZus{}3} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}3}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}3}
+{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} Set the seed}
+        \PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{RandomState}\PY{p}{(}\PY{l+m+mi}{101}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Choose 1000 random observations for x between 0 and 100}
+        \PY{n}{X} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{rand}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}Error term with sigma = 10, mu = 0, randn samples from the standard normal distribution}
+        \PY{n}{E\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}Error term with sigma = 500, mu = 0}
+        \PY{n}{E\PYZus{}2} \PY{o}{=} \PY{l+m+mi}{500}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}Error term with sigma = 1, mu = 0}
+        \PY{n}{E\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{*}\PY{n}{r}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}Response variables}
+        \PY{n}{Y\PYZus{}1} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}1}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}1}
+        \PY{n}{Y\PYZus{}2} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}2}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}2}
+        \PY{n}{Y\PYZus{}3} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{f\PYZus{}3}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{E\PYZus{}3}
 \end{Verbatim}
 
 
@@ -650,7 +673,7 @@ fit. The three functions are chosen as:
 \(N(0,s^2)\) distribution. First we look at what \(f_1\) looks like
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{c+c1}{\PYZsh{} Plot}
+{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} Plot}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          \PY{n}{axes} \PY{o}{=} \PY{n}{fig}\PY{o}{.}\PY{n}{add\PYZus{}axes}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
@@ -682,7 +705,7 @@ and
 We can calculate these as below
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
+{\color{incolor}In [{\color{incolor}11}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}1}
          \PY{n}{x\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{)}
          
@@ -713,7 +736,7 @@ Y = 5.50124312485292 + 5.064254524922961 * X
 for \(f_1\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}12}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} The equation using the betas above}
@@ -749,7 +772,7 @@ observed predictor variables. Then we plot them using a histogram to
 gain some insight into their distribution
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}13}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y1\PYZus{}fitted} \PY{o}{=} \PY{n}{beta1\PYZus{}0} \PY{o}{+} \PY{n}{beta1\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -765,7 +788,7 @@ gain some insight into their distribution
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A histogram of the residuals for f\PYZus{}1 when }\PY{l+s+se}{\PYZbs{}}
-         \PY{l+s+s1}{                fitted with the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{l+s+s1}{fitted with the regression line}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
          
@@ -789,14 +812,19 @@ and standard deviation 10.08588495757817
 good choice. In fact, the standard deviation for the residuals was
 roughly equal to the standard deviation for the error term when we
 constructed the function \(f_1\). A model may suffer from two types of
-error: error due to a discrepancy between the chosen function shape
+error: * error due to a discrepancy between the chosen function shape
 (here a linear model) and the true function shape (this is the reducible
-error); error due to random noise (this is the irreducible error). We
-can see here that the residuals are from irreducible error. Now let's do
-the same for f\_2.
+error), and * error due to random noise (this is the irreducible error).
+We can see here that the residuals are from irreducible error.
+
+Above we fitted a linear model to our 'designed' linear data. The error
+terms we expect to get are irreducible and a result of the error term E1
+added above.
+
+Now let's do the same for f\_2.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+{\color{incolor}In [{\color{incolor}14}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
@@ -813,7 +841,7 @@ the same for f\_2.
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}15}]:} Text(0.5,1,'Scatter plot of f\_2')
+{\color{outcolor}Out[{\color{outcolor}14}]:} Text(0.5,1,'Scatter plot of f\_2')
 \end{Verbatim}
             
     \begin{center}
@@ -822,7 +850,7 @@ the same for f\_2.
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
+{\color{incolor}In [{\color{incolor}15}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
          \PY{n}{x\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}2}\PY{p}{)}
          
@@ -852,7 +880,7 @@ Y = -8445.98030682202 + 506.16066894401735 * X
 for \(f_2\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}16}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} The predicted responses of these 1000 numbers}
@@ -881,7 +909,7 @@ for \(f_2\)
     We can then look at the residuals plot as we did before
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}17}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y2\PYZus{}fitted} \PY{o}{=} \PY{n}{beta2\PYZus{}0} \PY{o}{+} \PY{n}{beta2\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -915,13 +943,13 @@ The residuals are certainly not from a normal distribution
 
     \end{Verbatim}
 
-    This shows that the linear model we have chose may not be a good choice.
-So let's try \(X^2\) as a parameter instead of \(X\) in our linear
+    This shows that the linear model we have chosen may not be a good
+choice. We can try \(X^2\) as a parameter instead of \(X\) in our linear
 model. This way, we are transforming an existing parameter to form a new
 parameter.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} Create X\PYZca{}2 parameter}
+{\color{incolor}In [{\color{incolor}18}]:} \PY{c+c1}{\PYZsh{} Create X\PYZca{}2 parameter}
          \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
          
          \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}2}
@@ -954,7 +982,7 @@ Y = 14.470063153316005 + 5.075020979320466 * X\^{}2
 data for \(f_2\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}19}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x22} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Predicted responses to the 1000 numbers}
@@ -985,7 +1013,7 @@ look more normally distributed as has been assumed by the model
 architecture
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}20}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y22\PYZus{}fitted} \PY{o}{=} \PY{n}{beta22\PYZus{}0} \PY{o}{+} \PY{n}{beta22\PYZus{}1} \PY{o}{*} \PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -1029,7 +1057,7 @@ function was created.
 Now let's apply linear regression to f\_3 in a similar manner
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
+{\color{incolor}In [{\color{incolor}21}]:} \PY{c+c1}{\PYZsh{} Get figure handle}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Get axis handle and specify size}
@@ -1059,7 +1087,7 @@ show that the results can be misleading when we only consider the
 residuals plot to assess the quality of fit
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
+{\color{incolor}In [{\color{incolor}22}]:} \PY{c+c1}{\PYZsh{}Find the mean of the data for f\PYZus{}3}
          \PY{n}{x\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{X}\PY{p}{)}
          \PY{n}{y\PYZus{}bar3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{)}
          
@@ -1086,7 +1114,7 @@ Y = 10.511143457700811 + -0.1011987818100197 * X
 for \(f_3\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}23}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} Predict the response for those numbers}
@@ -1115,7 +1143,7 @@ for \(f_3\)
     We now assess the residuals
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
+{\color{incolor}In [{\color{incolor}24}]:} \PY{c+c1}{\PYZsh{} The fitted values are the predicted values given the observed values}
          \PY{n}{y3\PYZus{}fitted} \PY{o}{=} \PY{n}{beta3\PYZus{}0} \PY{o}{+} \PY{n}{beta3\PYZus{}1} \PY{o}{*} \PY{n}{X}
          
          \PY{c+c1}{\PYZsh{} The residuals are the differences between our predicted values and }
@@ -1167,8 +1195,9 @@ where \(TSS = \sum_{i=1}^n(y_i - \bar{y})^2\) is the \emph{total sum of
 squares} and \(RSS = \sum_{i=1}^n (y_i - \hat{y}_i)^2\) is the
 \emph{residual sum of squares}.
 
-STATEMENT: The \emph{Residual Squared Error}
-\(RSE=\sqrt{ \frac{ RSS }{ n-2 } }\) is a measure of lack of fit.
+Note: Another way to assess the lack of fit is through the
+\emph{Residual Squared Error} \(RSE=\sqrt{ \frac{ RSS }{ n-2 } }\).
+
 \(R^2\), as the form above suggests, is the proportion of variance that
 is explained. For a simple linear regression with 1 parameter (see
 Appendix):
@@ -1183,7 +1212,7 @@ which is easily extended to multiple regression.
 Below, we calculate this metric for \(f_3\)
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{c+c1}{\PYZsh{} TSS}
+{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} TSS}
          \PY{n}{TSS\PYZus{}3} \PY{o}{=} \PY{l+m+mi}{0}
          
          \PY{c+c1}{\PYZsh{} RSS}
@@ -1210,12 +1239,12 @@ above. To do this, we create a function that accepts observed and fitted
 values and returns the TSS and RSS of the fit
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
+{\color{incolor}In [{\color{incolor}26}]:} \PY{k}{def} \PY{n+nf}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}observed}\PY{p}{,}\PY{n}{y\PYZus{}fitted}\PY{p}{)}\PY{p}{:}
              \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
          \PY{l+s+sd}{    A function that calculates the TSS and RSS of a fit given observed }
          \PY{l+s+sd}{        and fitted values}
-         \PY{l+s+sd}{    y\PYZus{}observed := Observed data as a series object}
-         \PY{l+s+sd}{    y\PYZus{}fitted := Fitted data as a series object}
+         \PY{l+s+sd}{    y\PYZus{}observed := Observed data as a list}
+         \PY{l+s+sd}{    y\PYZus{}fitted := Fitted data as a list}
          \PY{l+s+sd}{    output := A (TSS,RSS) tuple of floats}
          \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
              
@@ -1239,7 +1268,7 @@ values and returns the TSS and RSS of the fit
     Then we apply this function to the three fitted models
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}1}
+{\color{incolor}In [{\color{incolor}27}]:} \PY{c+c1}{\PYZsh{} Calculate the TSS and RSS for the fitted regression line to f\PYZus{}1}
          \PY{n}{TSS\PYZus{}1}\PY{p}{,} \PY{n}{RSS\PYZus{}1} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{Y\PYZus{}1}\PY{p}{,}\PY{n}{y1\PYZus{}fitted}\PY{p}{)}
          
          \PY{c+c1}{\PYZsh{} Calculate the R\PYZca{}2 for the fit to f\PYZus{}1}
@@ -1304,7 +1333,7 @@ to fit and \emph{sklearn.metrics.r2\_score()} in order to calculate the
 above
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{} Import the linear model and the metric we\PYZsq{}ll be using}
+{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Import the linear model and the metric we\PYZsq{}ll be using}
          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{r2\PYZus{}score}
          
@@ -1423,7 +1452,7 @@ we have created. We can plot the model to see how well it follows the
 response variable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}32}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}29}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{99}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          \PY{n}{y32} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{x32} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PYZbs{}
              \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{x32}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
@@ -1452,7 +1481,7 @@ response variable.
     We can also check the residuals plot
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}33}]:} \PY{c+c1}{\PYZsh{} Calculate the fitted values using the observed values}
+{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} Calculate the fitted values using the observed values}
          \PY{n}{y32\PYZus{}fitted\PYZus{}sklearn} \PY{o}{=} \PY{n}{lm32}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{X} \PY{o}{+} \PYZbs{}
                              \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{lm32}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{*}\PY{n}{X}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}
          
@@ -1468,12 +1497,12 @@ response variable.
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Residuals}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{axes}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A plot of the residuals of the model using X,X\PYZca{}2 and }\PY{l+s+se}{\PYZbs{}}
-         \PY{l+s+s1}{                X\PYZca{}3 as predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{l+s+s1}{X\PYZca{}3 as predictors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
          
-         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{ }\PY{l+s+se}{\PYZbs{}}
-         \PY{l+s+s1}{    standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{This is roughly a normal distribution with mean }\PY{l+s+si}{\PYZob{}mean\PYZcb{}}\PY{l+s+s1}{ and }\PY{l+s+se}{\PYZbs{}}
+         \PY{l+s+s1}{standard deviation }\PY{l+s+si}{\PYZob{}std\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{mean}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{,}\PY{n}{std}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{Res\PYZus{}32}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1483,8 +1512,7 @@ response variable.
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-This is roughly a normal distribution with mean -1.7408297026122454e-15 and
-     standard deviation 1.043797076853439
+This is roughly a normal distribution with mean -1.7408297026122454e-15 and standard deviation 1.043797076853439
 
     \end{Verbatim}
 
@@ -1505,7 +1533,7 @@ Let's plot this along with the above for smaller values of X for which
 this approximation of sin(x) is acceptable.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}34}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
+{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} 1000 linearly spaced numbers}
          \PY{n}{x32} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{50}\PY{p}{,}\PY{l+m+mi}{1000}\PY{p}{)} 
          
          \PY{c+c1}{\PYZsh{} Predictions}
@@ -1518,9 +1546,7 @@ this approximation of sin(x) is acceptable.
          \PY{c+c1}{\PYZsh{} Only get the observed predictors and response where the predictors are less }
          \PY{c+c1}{\PYZsh{} than 50}
          \PY{n}{X\PYZus{}small} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{filter}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{\PYZlt{}} \PY{l+m+mi}{50}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}
-         \PY{n}{Y\PYZus{}small} \PY{o}{=} \PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}\PYZbs{}
-                                  \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{Y\PYZus{}3}\PY{p}{,}\PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PYZbs{}
-                       \PY{n}{apply}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZlt{}}\PY{l+m+mi}{50}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}
+         \PY{n}{Y\PYZus{}small} \PY{o}{=} \PY{n}{Y\PYZus{}3}\PY{p}{[}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x} \PY{o}{\PYZlt{}} \PY{l+m+mi}{50}\PY{p}{,}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{]}
          
          \PY{c+c1}{\PYZsh{} Plot the data, the fitted model and the taylor expansion}
          \PY{n}{fig} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
@@ -1547,7 +1573,10 @@ this approximation of sin(x) is acceptable.
     \end{center}
     { \hspace*{\fill} \\}
     
-    In addition to the \(R^2\) statistic, it is useful to assess whether a
+    \paragraph{Statistical significance of regression
+coefficients}\label{statistical-significance-of-regression-coefficients}
+
+In addition to the \(R^2\) statistic, it is useful to assess whether a
 variable is statistically significant. To do this for a variable \(X\)
 with coefficient \(\beta_1\), we test the null hypothesis
 
@@ -1560,7 +1589,7 @@ against
 For the first model we have the fitted model
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}35}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}32}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{f(x) = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ + }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ X}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{lm1}\PY{o}{.}\PY{n}{intercept\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{lm1}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -1570,17 +1599,17 @@ f(x) = 5.501243124853005 + 5.064254524922959 X
     \end{Verbatim}
 
     The standard errors of the estimators \(\hat{\beta}_0\) and
-\(\hat{\beta}_1\) for the coefficients have the form
+\(\hat{\beta}_1\) for the coefficients have the form (See Appendix-5):
 
-\[SE(\beta_0) = \sqrt{\sigma^2 [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2}]} \approx  RSE\sqrt{ [\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2}]}\]
+\[SE(\beta_0) = \sqrt{\sigma^2 \left[\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right]} \approx  RSE\sqrt{ \left[\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right]}\]
 
-Where RSE is the \emph{residual standard error} estimating the
-population \(\sigma = \sqrt{Var(\epsilon)}\) and has the form
+where RSE is the \emph{residual standard error} estimating the
+population \(\sigma =\sqrt{Var(\epsilon)}\) and has the form
 \(RSE = \sqrt{\frac{\sum_{i=1}^n \epsilon_i^2}{n-2}} = \sqrt{\frac{RSS}{n-2}}\).
 
-\[SE(\beta_1) = \sqrt{   \frac{ \sigma^2 }{ \sum_{i=1}^n (x_i - \bar{x})^2 }   } \approx RSE\sqrt{   \frac{ 1 }{ \sum_{i=1}^n (x_i - \bar{x})^2 }   }\]
+In addition we can show that:
 
-(PROOF of these equations?)
+\[SE(\beta_1) = \sqrt{   \frac{ \sigma^2 }{ \sum_{i=1}^n (x_i - \bar{x})^2 }   } \approx RSE\sqrt{   \frac{ 1 }{ \sum_{i=1}^n (x_i - \bar{x})^2 }   }\]
 
 Using the standard errors, we can then conduct the hypothesis test above
 as a t-test. We have that
@@ -1589,9 +1618,8 @@ as a t-test. We have that
 
 \[\frac{ \hat{\beta_1} - \beta_1^{(0)} }{ SE(\beta_1) } \sim t_{n-2}\]
 
-where \(^{(0)}\) denotes the null value.
-
-(PROOF that this is distributed as student t?)
+where \(^{(0)}\) denotes the null value (the null hypothesis above sets
+both \(\beta_0^{(0)}=0\) and \(\beta_1^{(0)}=0\)).
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}33}]:} \PY{c+c1}{\PYZsh{} we need the scipy.stats package for the t\PYZhy{}distribution}
@@ -1800,7 +1828,7 @@ These are both statistically significant!
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}36}]:} [<matplotlib.lines.Line2D at 0x23a2f59b1d0>]
+{\color{outcolor}Out[{\color{outcolor}36}]:} [<matplotlib.lines.Line2D at 0x18c1bb56ba8>]
 \end{Verbatim}
             
     \begin{center}
@@ -1887,8 +1915,8 @@ Model for Y\_1: Explanatory variable X for Y\_1
 Dep. Variable:                      y   R-squared:                       0.995
 Model:                            OLS   Adj. R-squared:                  0.995
 Method:                 Least Squares   F-statistic:                 2.063e+05
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:02   Log-Likelihood:                -3730.1
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:09   Log-Likelihood:                -3730.1
 No. Observations:                1000   AIC:                             7464.
 Df Residuals:                     998   BIC:                             7474.
 Df Model:                           1                                         
@@ -1915,8 +1943,8 @@ Model for Y\_2: Explanatory variable X for Y\_2
 Dep. Variable:                      y   R-squared:                       0.934
 Model:                            OLS   Adj. R-squared:                  0.934
 Method:                 Least Squares   F-statistic:                 1.405e+04
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:02   Log-Likelihood:                -9678.1
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:09   Log-Likelihood:                -9678.1
 No. Observations:                1000   AIC:                         1.936e+04
 Df Residuals:                     998   BIC:                         1.937e+04
 Df Model:                           1                                         
@@ -1943,8 +1971,8 @@ Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
 Dep. Variable:                      y   R-squared:                       0.999
 Model:                            OLS   Adj. R-squared:                  0.999
 Method:                 Least Squares   F-statistic:                 8.338e+05
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:02   Log-Likelihood:                -7670.0
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:09   Log-Likelihood:                -7670.0
 No. Observations:                1000   AIC:                         1.534e+04
 Df Residuals:                     998   BIC:                         1.535e+04
 Df Model:                           1                                         
@@ -1973,8 +2001,8 @@ Model for Y\_3: Explanatory variable X for Y\_3
 Dep. Variable:                      y   R-squared:                       0.594
 Model:                            OLS   Adj. R-squared:                  0.594
 Method:                 Least Squares   F-statistic:                     1461.
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):          1.37e-197
-Time:                        09:31:02   Log-Likelihood:                -2292.4
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):          1.37e-197
+Time:                        17:21:09   Log-Likelihood:                -2292.4
 No. Observations:                1000   AIC:                             4589.
 Df Residuals:                     998   BIC:                             4599.
 Df Model:                           1                                         
@@ -2001,8 +2029,8 @@ Model for Y\_3: Explanatory variables X,X\^{}2,X\^{}3 for Y\_3
 Dep. Variable:                      y   R-squared:                       0.923
 Model:                            OLS   Adj. R-squared:                  0.923
 Method:                 Least Squares   F-statistic:                     3974.
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:02   Log-Likelihood:                -1461.8
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:09   Log-Likelihood:                -1461.8
 No. Observations:                1000   AIC:                             2932.
 Df Residuals:                     996   BIC:                             2951.
 Df Model:                           3                                         
@@ -2047,8 +2075,8 @@ Model for Y\_2: Explanatory variable X\^{}2 for Y\_2
 Dep. Variable:                      y   R-squared:                       0.999
 Model:                            OLS   Adj. R-squared:                  0.999
 Method:                 Least Squares   F-statistic:                 1.878e+06
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:03   Log-Likelihood:                -7670.2
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:09   Log-Likelihood:                -7670.2
 No. Observations:                1000   AIC:                         1.534e+04
 Df Residuals:                     999   BIC:                         1.535e+04
 Df Model:                           1                                         
@@ -2085,7 +2113,7 @@ Warnings:
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}40}]:} [<matplotlib.lines.Line2D at 0x23a30ab4b70>]
+{\color{outcolor}Out[{\color{outcolor}40}]:} [<matplotlib.lines.Line2D at 0x18c1c9d7ef0>]
 \end{Verbatim}
             
     \begin{center}
@@ -2455,8 +2483,8 @@ Model for Y: Explanatory variable X\_1 and X\_2 for Y
 Dep. Variable:                      y   R-squared:                       0.864
 Model:                            OLS   Adj. R-squared:                  0.864
 Method:                 Least Squares   F-statistic:                     3169.
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:06   Log-Likelihood:                -8160.3
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:12   Log-Likelihood:                -8160.3
 No. Observations:                1000   AIC:                         1.633e+04
 Df Residuals:                     997   BIC:                         1.634e+04
 Df Model:                           2                                         
@@ -2502,8 +2530,8 @@ Model for f: Explanatory variables X\_1, X\_2 and X\_1 * X\_2 for Y\_2
 Dep. Variable:                      y   R-squared:                       0.998
 Model:                            OLS   Adj. R-squared:                  0.998
 Method:                 Least Squares   F-statistic:                 1.651e+05
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:06   Log-Likelihood:                -6052.5
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:12   Log-Likelihood:                -6052.5
 No. Observations:                1000   AIC:                         1.211e+04
 Df Residuals:                     996   BIC:                         1.213e+04
 Df Model:                           3                                         
@@ -2558,8 +2586,8 @@ Model for Y: Explanatory variable X\_1 and X\_2 for Y
 Dep. Variable:                      y   R-squared:                       0.865
 Model:                            OLS   Adj. R-squared:                  0.864
 Method:                 Least Squares   F-statistic:                     2123.
-Date:                Tue, 13 Nov 2018   Prob (F-statistic):               0.00
-Time:                        09:31:06   Log-Likelihood:                -8157.8
+Date:                Mon, 11 Feb 2019   Prob (F-statistic):               0.00
+Time:                        17:21:12   Log-Likelihood:                -8157.8
 No. Observations:                1000   AIC:                         1.632e+04
 Df Residuals:                     996   BIC:                         1.634e+04
 Df Model:                           3                                         
@@ -2711,11 +2739,25 @@ C:\textbackslash{}Users\textbackslash{}HVAD\textbackslash{}Anaconda3\textbacksla
 \end{Verbatim}
 
 
+    \begin{Verbatim}[commandchars=\\\{\}]
+The MSE is [5.29577792e+09]
+
+    \end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}59}]:} <matplotlib.collections.PathCollection at 0x18c1ea82eb8>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_110_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     Let's see what the MSE is when we use the 'LotArea' predictor to predict
 'SalePrice'.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}69}]:} \PY{c+c1}{\PYZsh{} The predictor and response}
+{\color{incolor}In [{\color{incolor}60}]:} \PY{c+c1}{\PYZsh{} The predictor and response}
          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
          
@@ -2746,12 +2788,12 @@ C:\textbackslash{}Users\textbackslash{}HVAD\textbackslash{}Anaconda3\textbacksla
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-[2.27491446e+09]
+The MSE is [6.89081973e+09]
 
     \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}69}]:} <matplotlib.collections.PathCollection at 0x23a2f682358>
+{\color{outcolor}Out[{\color{outcolor}60}]:} <matplotlib.collections.PathCollection at 0x18c1eadc630>
 \end{Verbatim}
             
     \begin{center}
@@ -2771,58 +2813,58 @@ observations as a training set. This is called Leave One Out Cross
 Validation (LOOCV). We do that below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}248}]:} \PY{k+kn}{import} \PY{n+nn}{random}
-          
-          \PY{c+c1}{\PYZsh{} The predictor and response}
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} Select a random element to be the test set}
-          \PY{n}{r} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{SystemRandom}\PY{p}{(}\PY{p}{)}
-          \PY{n}{testint} \PY{o}{=} \PY{n}{r}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} The train set}
-          \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} The test set is that one observation}
-          \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{testint}\PY{p}{]}
-          \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} The train set is all observations except that one observation}
-          \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{testint}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} The test set consist of one response}
-          \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{testint}\PY{p}{]}
-          \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{testint}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} The Linear Regression model object}
-          \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Fit the model}
-          \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Predict}
-          \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Get the MSE. MSE = RSS/n}
-          \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
-          \PY{n}{MSE} \PY{o}{=} \PY{n}{rss}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Plot}
-          \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{,}\PY{n}{y\PYZus{}test}\PY{p}{)}
-          \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}61}]:} \PY{k+kn}{import} \PY{n+nn}{random}
+         
+         \PY{c+c1}{\PYZsh{} The predictor and response}
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} Select a random element to be the test set}
+         \PY{n}{r} \PY{o}{=} \PY{n}{random}\PY{o}{.}\PY{n}{SystemRandom}\PY{p}{(}\PY{p}{)}
+         \PY{n}{testint} \PY{o}{=} \PY{n}{r}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} The train set}
+         \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} The test set is that one observation}
+         \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{testint}\PY{p}{]}
+         \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} The train set is all observations except that one observation}
+         \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{testint}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} The test set consist of one response}
+         \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{testint}\PY{p}{]}
+         \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{testint}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} The Linear Regression model object}
+         \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Fit the model}
+         \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Predict}
+         \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Get the MSE. MSE = RSS/n}
+         \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+         \PY{n}{MSE} \PY{o}{=} \PY{n}{rss}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{,}\PY{n}{y\PYZus{}test}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-[605626.97016195]
+[4735.66625009]
 
     \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}248}]:} <matplotlib.collections.PathCollection at 0x23a35a981d0>
+{\color{outcolor}Out[{\color{outcolor}61}]:} <matplotlib.collections.PathCollection at 0x18c1eae4128>
 \end{Verbatim}
             
     \begin{center}
@@ -2838,44 +2880,44 @@ leave a different observation as a test observation. Then we calculate
 the average MSE over all these Cross Validations.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}249}]:} \PY{c+c1}{\PYZsh{} The predictor and response}
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YearBuilt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} The MSE array. Each element is the MSE of a particular Cross Validation}
-          \PY{n}{MSE} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} Perform LOOCV on the data using Linear Regression}
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{c+c1}{\PYZsh{} The training set}
-              \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-              
-              \PY{c+c1}{\PYZsh{} The test set is a single observation}
-              \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
-              \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} The test set is a single observation}
-              \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
-              \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Train the model}
-              \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Fit}
-              \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Predict}
-              \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Calculate the MSE. MSE = RSS/n\PYZus{}test}
-              \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
-              \PY{n}{MSE}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rss}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} Print the mean MSE value}
-          \PY{n+nb}{print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}62}]:} \PY{c+c1}{\PYZsh{} The predictor and response}
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YearBuilt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} The MSE array. Each element is the MSE of a particular Cross Validation}
+         \PY{n}{MSE} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} Perform LOOCV on the data using Linear Regression}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} The training set}
+             \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+             
+             \PY{c+c1}{\PYZsh{} The test set is a single observation}
+             \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+             \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} The test set is a single observation}
+             \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+             \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Train the model}
+             \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Fit}
+             \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Predict}
+             \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Calculate the MSE. MSE = RSS/n\PYZus{}test}
+             \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+             \PY{n}{MSE}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rss}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Print the mean MSE value}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -2885,37 +2927,37 @@ the average MSE over all these Cross Validations.
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}250}]:} \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{n}{MSE} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-              \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-              
-              \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
-              \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
-          
-              \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
-              \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
-              \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Train}
-              \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Fit}
-              \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} Predict}
-              \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
-          
-              \PY{c+c1}{\PYZsh{} MSE}
-              \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
-              \PY{n}{MSE}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rss}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}63}]:} \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{n}{MSE} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+             \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+             
+             \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+             \PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
+         
+             \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+             \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{,}\PY{n}{i}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Train}
+             \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Fit}
+             \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Predict}
+             \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} MSE}
+             \PY{n}{tss}\PY{p}{,}\PY{n}{rss} \PY{o}{=} \PY{n}{TSS\PYZus{}RSS}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}
+             \PY{n}{MSE}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rss}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{MSE}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -2925,22 +2967,22 @@ the average MSE over all these Cross Validations.
     \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}251}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cross\PYZus{}validation} \PY{k}{import} \PY{n}{cross\PYZus{}val\PYZus{}score}
-          \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{mean\PYZus{}squared\PYZus{}error}
+{\color{incolor}In [{\color{incolor}64}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cross\PYZus{}validation} \PY{k}{import} \PY{n}{cross\PYZus{}val\PYZus{}score}
+         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{mean\PYZus{}squared\PYZus{}error}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}253}]:} \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
-          \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}65}]:} \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+         \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}253}]:} 5954196196.345752
+{\color{outcolor}Out[{\color{outcolor}65}]:} 5954196196.345752
 \end{Verbatim}
             
     Let's observe now which approach (value of k in k-fold cross validation)
@@ -2948,58 +2990,58 @@ predicts the test MSE best. We split our train and test data. Then
 estimate the test MSE using the training data.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}448}]:} \PY{k+kn}{import} \PY{n+nn}{math}
-          
-          \PY{n}{datasetMSEEstimatek\PYZus{}10} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEEstimatek\PYZus{}20} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEEstimatek\PYZus{}100} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEActual} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} The predictor and response}
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          
-          \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
-              \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{j}\PY{p}{)}
-          
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              
-              \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-              \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
-              \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
-              \PY{n}{datasetMSEActual}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mean\PYZus{}squared\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}\PY{p}{)}
-              
-              \PY{k}{if} \PY{n}{j}\PY{o}{\PYZpc{}}\PY{k}{50} == 0:
-                  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Step = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{)}
-              
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 10 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 20 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 100 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The actual MSE on this data set is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n}{fig}\PY{p}{,}\PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{nrows} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{ncols} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{sharex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-          \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Averaged Actual MSE over different train/test splits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}66}]:} \PY{k+kn}{import} \PY{n+nn}{math}
+         
+         \PY{n}{datasetMSEEstimatek\PYZus{}10} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEEstimatek\PYZus{}20} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEEstimatek\PYZus{}100} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEActual} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} The predictor and response}
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LotArea}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         
+         \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+             \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{j}\PY{p}{)}
+         
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             
+             \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+             \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
+             \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+             \PY{n}{datasetMSEActual}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mean\PYZus{}squared\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}\PY{p}{)}
+             
+             \PY{k}{if} \PY{n}{j}\PY{o}{\PYZpc{}}\PY{k}{50} == 0:
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Step = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{)}
+             
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 10 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 20 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 100 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The actual MSE on this data set is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{fig}\PY{p}{,}\PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{nrows} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{ncols} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{sharex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Averaged Actual MSE over different train/test splits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -3022,7 +3064,7 @@ The actual MSE on this data set is : 6046571007.118181
     \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}448}]:} Text(0.5,1,'Averaged Actual MSE over different train/test splits')
+{\color{outcolor}Out[{\color{outcolor}66}]:} Text(0.5,1,'Averaged Actual MSE over different train/test splits')
 \end{Verbatim}
             
     \begin{center}
@@ -3031,58 +3073,58 @@ The actual MSE on this data set is : 6046571007.118181
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}447}]:} \PY{k+kn}{import} \PY{n+nn}{math}
-          
-          \PY{n}{datasetMSEEstimatek\PYZus{}10} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEEstimatek\PYZus{}20} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEEstimatek\PYZus{}100} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{datasetMSEActual} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{c+c1}{\PYZsh{} The predictor and response}
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YearBuilt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          
-          \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
-              \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{j}\PY{p}{)}
-          
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
-              \PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-              
-              
-              \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
-              \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
-              \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
-              \PY{n}{datasetMSEActual}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mean\PYZus{}squared\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}\PY{p}{)}
-              
-              \PY{k}{if} \PY{n}{j}\PY{o}{\PYZpc{}}\PY{k}{50} == 0:
-                  \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Step = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{)}
-              
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 10 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 20 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 100 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The actual MSE on this data set is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          
-          \PY{n}{fig}\PY{p}{,}\PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{nrows} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{ncols} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{sharex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-          \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-          
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-          \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Averaged Actual MSE over different train/test splits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}67}]:} \PY{k+kn}{import} \PY{n+nn}{math}
+         
+         \PY{n}{datasetMSEEstimatek\PYZus{}10} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEEstimatek\PYZus{}20} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEEstimatek\PYZus{}100} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{datasetMSEActual} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{c+c1}{\PYZsh{} The predictor and response}
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YearBuilt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         
+         \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+             \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{j}\PY{p}{)}
+         
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+             \PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             
+             
+             \PY{n}{model} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+             \PY{n}{model}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,}\PY{n}{y\PYZus{}train}\PY{p}{)}
+             \PY{n}{predictions} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+             \PY{n}{datasetMSEActual}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mean\PYZus{}squared\PYZus{}error}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,}\PY{n}{predictions}\PY{p}{)}\PY{p}{)}
+             
+             \PY{k}{if} \PY{n}{j}\PY{o}{\PYZpc{}}\PY{k}{50} == 0:
+                 \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Step = }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{j}\PY{p}{)}\PY{p}{)}
+             
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 10 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 20 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The mean MSE Estimation using K\PYZhy{}fold CV with k = 100 is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The actual MSE on this data set is : }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{fig}\PY{p}{,}\PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{nrows} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{ncols} \PY{o}{=} \PY{l+m+mi}{2}\PY{p}{,}\PY{n}{sharex}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}20}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEEstimatek\PYZus{}100}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CV with k = 100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{map}\PY{p}{(}\PY{n}{math}\PY{o}{.}\PY{n}{log}\PY{p}{,}\PY{n}{datasetMSEActual}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Averaged Actual MSE over different train/test splits}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -3105,7 +3147,7 @@ The actual MSE on this data set is : 4587675012.9899845
     \end{Verbatim}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}447}]:} Text(0.5,1,'Averaged Actual MSE over different train/test splits')
+{\color{outcolor}Out[{\color{outcolor}67}]:} Text(0.5,1,'Averaged Actual MSE over different train/test splits')
 \end{Verbatim}
             
     \begin{center}
@@ -3139,51 +3181,34 @@ We can try out all the predictors and choose the one that minimises the
 mean squared errors. This can be done by using a loop as below.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}468}]:} \PY{n}{a}\PY{o}{=}\PY{n}{X}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-          \PY{n}{a}\PY{o}{.}\PY{n}{columns}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}468}]:} Index(['LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
-                 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
-                 '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath',
-                 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr',
-                 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea',
-                 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch',
-                 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold'],
-                dtype='object')
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}482}]:} \PY{c+c1}{\PYZsh{} Run through each model in the correct order and run CV on it and save the best CV score}
-          \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
-          \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          \PY{c+c1}{\PYZsh{} y is the response variable}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
-              \PY{c+c1}{\PYZsh{} First set X to be the full set of remaining parameters}
-              \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{]}
-              
-              \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
-              
-              \PY{k}{if} \PY{n}{bestMeanCV} \PY{o}{\PYZgt{}} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-                  \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-                  \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{n}{i}
-              \PY{k}{elif} \PY{n}{bestMeanCV} \PY{o}{==} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}
-                  \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-                  \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{n}{i}
-                  
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The final best model is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ and its TEST MSE is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}68}]:} \PY{c+c1}{\PYZsh{} Run through each model in the correct order and run CV on it and save the best CV score}
+         \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+         \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} y is the response variable}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} First set X to be the full set of remaining parameters}
+             \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{]}
+             
+             \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{X}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+             
+             \PY{k}{if} \PY{n}{bestMeanCV} \PY{o}{\PYZgt{}} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{n}{i}
+             \PY{k}{elif} \PY{n}{bestMeanCV} \PY{o}{==} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}
+                 \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{n}{i}
+                 
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The final best model is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ and its TEST MSE is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-The final best model is OverallQual and its TEST R\^{}2 is 2371260934.069027
+The final best model is OverallQual and its TEST MSE is 2371260934.069027
 
     \end{Verbatim}
 
@@ -3197,48 +3222,48 @@ added. Once we get to a point where adding another predictor to the
 model does not improve the test MSE, then we stop there.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}517}]:} \PY{c+c1}{\PYZsh{} Run through each model in the correct order and run CV on it and save the best CV score}
-          \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
-          \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-          \PY{n}{oldArraySize} \PY{o}{=} \PY{l+m+mi}{0}
-          
-          \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-          
-          \PY{n}{columnsArray} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{columns}
-          
-          \PY{c+c1}{\PYZsh{} y is the response variable}
-          \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
-          
-          \PY{k}{while} \PY{n}{oldArraySize} \PY{o}{!=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{:}
-              \PY{n}{bestPredictor} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
-              \PY{n}{oldArraySize} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{)}
-              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{columnsArray}\PY{p}{:}
-                  \PY{n}{thisModel} \PY{o}{=} \PY{n}{bestMeanCVModel}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
-                  \PY{n}{thisModel}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{p}{)}
-                  \PY{c+c1}{\PYZsh{} First set X to be the full set of remaining parameters}
-                  \PY{n}{x} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{thisModel}\PY{p}{]}
-          
-                  \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{columns}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
-                      \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{x}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
-                  \PY{k}{else}\PY{p}{:}
-                      \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
-                      
-                  \PY{k}{if} \PY{n}{bestMeanCV} \PY{o}{\PYZgt{}} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{:}
-                      \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-                      \PY{n}{bestPredictor} \PY{o}{=} \PY{n}{i}
-                  \PY{k}{elif} \PY{n}{bestMeanCV} \PY{o}{==} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}
-                      \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
-                      \PY{n}{bestPredictor} \PY{o}{=} \PY{n}{i}
-              
-              \PY{k}{if} \PY{n}{bestPredictor} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{columnsArray}\PY{p}{:}
-                  \PY{k}{break}
-                  
-              \PY{n}{columnsArray}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{bestPredictor}\PY{p}{)}
-              \PY{n}{bestMeanCVModel}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{bestPredictor}\PY{p}{)}
-              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ was added with test MSE }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
-          
-                  
-          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The final best model is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ and its TEST MSE is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}69}]:} \PY{c+c1}{\PYZsh{} Run through each model in the correct order and run CV on it and save the best CV score}
+         \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+         \PY{n}{bestMeanCVModel} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{oldArraySize} \PY{o}{=} \PY{l+m+mi}{0}
+         
+         \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{n}{columnsArray} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{columns}
+         
+         \PY{c+c1}{\PYZsh{} y is the response variable}
+         \PY{n}{y} \PY{o}{=} \PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         
+         \PY{k}{while} \PY{n}{oldArraySize} \PY{o}{!=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{:}
+             \PY{n}{bestPredictor} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+             \PY{n}{oldArraySize} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{columns}\PY{p}{)}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{columnsArray}\PY{p}{:}
+                 \PY{n}{thisModel} \PY{o}{=} \PY{n}{bestMeanCVModel}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{thisModel}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{i}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} First set X to be the full set of remaining parameters}
+                 \PY{n}{x} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{thisModel}\PY{p}{]}
+         
+                 \PY{k}{if} \PY{n+nb}{len}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{columns}\PY{p}{)} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{:}
+                     \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{x}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+                 \PY{k}{else}\PY{p}{:}
+                     \PY{n}{linregCVScores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}\PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{x}\PY{p}{,}\PY{n}{y}\PY{p}{,}\PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{neg\PYZus{}mean\PYZus{}squared\PYZus{}error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+                     
+                 \PY{k}{if} \PY{n}{bestMeanCV} \PY{o}{\PYZgt{}} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+                     \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                     \PY{n}{bestPredictor} \PY{o}{=} \PY{n}{i}
+                 \PY{k}{elif} \PY{n}{bestMeanCV} \PY{o}{==} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{:}
+                     \PY{n}{bestMeanCV} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{linregCVScores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+                     \PY{n}{bestPredictor} \PY{o}{=} \PY{n}{i}
+             
+             \PY{k}{if} \PY{n}{bestPredictor} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{columnsArray}\PY{p}{:}
+                 \PY{k}{break}
+                 
+             \PY{n}{columnsArray}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{bestPredictor}\PY{p}{)}
+             \PY{n}{bestMeanCVModel}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{bestPredictor}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ was added with test MSE }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
+         
+                 
+         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The final best model is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ and its TEST MSE is }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{bestMeanCVModel}\PY{p}{,}\PY{n}{bestMeanCV}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -3269,39 +3294,21 @@ The final best model is ['OverallQual', 'GrLivArea', 'BsmtFinSF1', 'GarageCars',
     Our final model is now contained in bestMeanCVModel.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}141}]:} \PY{k+kn}{import} \PY{n+nn}{time}
-          
-          \PY{n}{now} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
-          
-          \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
-          
-          \PY{n+nb}{print}\PY{p}{(}\PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{now}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}70}]:} \PY{k+kn}{import} \PY{n+nn}{time}
+         
+         \PY{n}{now} \PY{o}{=} \PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{time}\PY{o}{.}\PY{n}{sleep}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{time}\PY{o}{.}\PY{n}{time}\PY{p}{(}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{now}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-2.0045924186706543
+2.0009758472442627
 
     \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}231}]:} \PY{n}{np}\PY{o}{.}\PY{n}{delete}\PY{p}{(}\PY{n}{a}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}231}]:} array([5, 4, 4])
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}232}]:} \PY{n}{a}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}232}]:} array([5, 4, 5, 4])
-\end{Verbatim}
-            
     \subsection{Appendix}\label{appendix}
 
     \subsubsection{\texorpdfstring{A1 -
@@ -3431,9 +3438,9 @@ We approximate the coefficients using the data we have observed:
 
 \[\hat{Y} = \hat{\beta_0} + \hat{\beta_1} X\]
 
-taking the expectation of both sides of the above equations (Note that
-it is assumed that \(\beta_i\) and \(\hat{\beta}_i\)) are constant and
-determined such that they satisfy the line of best fit:
+Note that it is assumed that \(\beta_i\) and \(\hat{\beta}_i\) are
+constant and determined such that they satisfy the line of best fit.
+Taking the expectation of both sides of the above equations:
 
 \[\mu_Y = E[Y] = E[\beta_0 + \beta_1 X + \epsilon] = E[\beta_0] + E[\beta_1 X] + E[\epsilon] = \beta_0 + \beta_1 E[X] + 0 = \beta_0 + \beta_1 \mu_X\]
 
@@ -3486,6 +3493,174 @@ Using
 \[= \frac{ \left[ \sum_{i=1}^n (\bar{x} - x_i)(y_i - \bar{y}) \right]^2 }{ \left[ \sqrt{ \sum_{i=1}^n (y_i - \bar{y})^2 \sum_{i=1}^n (x_i - \bar{x})^2} \right]^2}\]
 
 \[= corr(X,Y)^2\]
+
+    \subsubsection{\texorpdfstring{A5 - Variance of \(\beta_{0}\) and
+\(\beta_{1}\)}{A5 - Variance of \textbackslash{}beta\_\{0\} and \textbackslash{}beta\_\{1\}}}\label{a5---variance-of-beta_0-and-beta_1}
+
+    First, note that \(y\) is a dependent variable on \(x\). This means that
+any linear model and subsequently the calculations of \(\beta_{0}\) and
+\(\beta_{1}\) are susceptible to a variation of \(y\) for a given \(x\)
+value. Hence in the derivation of the variance of those parameters \(x\)
+values are treated as a constant.
+
+We start with the definition of \(\beta_{1}\):
+\[\beta_{1}=\frac{\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}\]
+
+The variance of \(\beta_{1}\) is therefore given by:
+\[Var(\beta_{1})=Var\left[\frac{\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{y})}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}\right]\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}Var\bigg[\sum_{i=1}^{n}(x_{i}-\bar{x})(y_{i}-\bar{x})\bigg]\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}Var\bigg[\sum_{i=1}^{n}(x_{i}y_{i}-x_{i}\bar{y}-\bar{x}y_{i}+\bar{x}\bar{y})\bigg]\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}Var\bigg[\sum_{i=1}^{n} x_{i}y_{i}-\sum_{i=1}^{n} x_{i}\bar{y}-\sum_{i=1}^{n} \bar{x}y_{i}+\sum_{i=1}^{n} \bar{x}\bar{y}\bigg]\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}Var\bigg[\sum_{i=1}^{n} x_{i}y_{i}- n \bar{x}\bar{y}-\sum_{i=1}^{n} \bar{x}y_{i}+ n \bar{x}\bar{y}\bigg]\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}Var\bigg[\sum_{i=1}^{n}(x_{i}y_{i}-\bar{x}y_{i})\bigg]\]
+
+As each observation is indepedent from another (\(y_{i}\) are
+independent of each other) we have:
+
+\[Var(\beta_{1})=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}\sum_{i=1}^{n}Var(x_{i}y_{i}-\bar{x}y_{i})\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}Var(y_{i})\\
+=\frac{1}{\left(\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\right)^{2}}\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}\sigma_{y}^{2}\\
+=\frac{\sigma_{y}^{2}}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}\]
+
+However since \(y_{i}=\beta_{0}+\beta_{1}x_{i}+\epsilon_{i}\) and
+\(\epsilon_{i}\) is the only random variable on the right hand side, we
+have:
+
+\[Var(y_{i})=Var(\epsilon_{i})=\sigma^{2}\].
+
+Then our expression above becomes:
+
+\[Var(\beta_{1})= \frac{\sigma^{2}}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}  \]
+
+Since \(\beta_{0}=\bar{y}-\beta_{1}\bar{x}\) we have:
+
+\begin{equation}
+\begin{split}
+E(\beta_0) &= E[\bar{y}] + \bar{x}E[\beta_1]\\
+&= E[\frac{1}{n} \sum_{i=1}^n y_i] + \bar{x}\frac{1}{\sum_{k=1}^n (x_i - \bar{x})^2}E[\sum_{i=1}^n x_i y_i - n\bar{x}\bar{y}]\\
+&= \mu_Y + \bar{x}\frac{1}{\sum_{k=1}^n (x_i - \bar{x})^2}[\sum_{i=1}^n x_i E[y_i] - n\bar{x}E[\bar{y}]]\\
+&= \mu_Y + \bar{x}\frac{1}{\sum_{k=1}^n (x_i - \bar{x})^2}[\mu_Y \sum_{i=1}^n x_i - n\bar{x}\mu_Y]\\
+&= \mu_Y
+\end{split}
+\end{equation}
+
+and
+
+\begin{equation}
+\begin{split}
+E(\beta_0^2) &= E[\bar{y}^2 + 2 \beta_1 \bar{x} \bar{y} + \beta_1^2 \bar{x}^2]\\
+&= E[\bar{y}^2] + 2 \bar{x} E[\beta_1 \bar{y}] + \bar{x}^2 E[\beta_1^2]\\
+&= Var(\bar{y}) + E[\bar{y}]^2 + \bar{x}^2 \left[ Var(\beta_1) + E[\beta_1]^2  \right]\\
+&= Var(\bar{y}) + \mu_Y^2 + \bar{x}^2 \left[ Var(\beta_1) \right]\\
+&= \frac{\sigma^2}{n} + \mu_Y^2 + \frac{\bar{x}^2 \sigma^2}{\sum_{k=1}^n (x_k - \bar{x})}
+\end{split}
+\end{equation}
+
+finally
+
+\begin{equation}
+\begin{split}
+Var(\beta_0) &= E[\beta_0^2] - E[\beta_0]^2\\
+&= \sigma^{2}\left[ \frac{1}{n} + \frac{\bar{x}^{2}}{\sum_{i=1}^{n}(x_{i}-\bar{x})^{2}}  \right]
+\end{split}
+\end{equation}
+
+Note that, with a bit of algebraic manipulation \(\big(\)hint:
+\(\sum(x_{i}-\bar{x})^{2}=\sum x_{i}^{2}-n\bar{x}^{2})\)\(\big)\), this
+is also equal to:
+
+\[Var(\beta_{0}) = \frac{\sigma^{2}\sum_{i=1}^{n}x_{i}^{2}}{n\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2} } \]
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}71}]:} \PY{c+c1}{\PYZsh{} Import modules}
+         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Import House Prices dataset \PYZhy{} Only quantitative fields and cleaned (https://www.kaggle.com/c/house\PYZhy{}prices\PYZhy{}advanced\PYZhy{}regression\PYZhy{}techniques/data)}
+        \PY{n}{housePrice} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{HousePrice.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{sns}\PY{o}{.}\PY{n}{distplot}\PY{p}{(}\PY{n}{housePrice}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{staticimg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hist}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{housePrice}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{img}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{housePrice}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LinearRegression}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cross\PYZus{}validation} \PY{k}{import} \PY{n}{train\PYZus{}test\PYZus{}split}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics} \PY{k}{import} \PY{n}{r2\PYZus{}score}\PY{p}{,}\PY{n}{mean\PYZus{}squared\PYZus{}error}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{linreg} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{X} \PY{o}{=} \PY{n}{housePrice}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{linreg}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{housePrice}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{pred\PYZus{}X} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+        
+        \PY{n}{pred\PYZus{}X}
+        
+        \PY{n}{linreg}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{pred\PYZus{}X}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{def} \PY{n+nf}{get\PYZus{}Prediction}\PY{p}{(}\PY{n}{df}\PY{p}{,}\PY{n}{ls}\PY{p}{)}\PY{p}{:}
+            \PY{n}{linreg} \PY{o}{=} \PY{n}{LinearRegression}\PY{p}{(}\PY{p}{)}
+            \PY{n}{X} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+            \PY{n}{linreg}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+            \PY{n}{pred\PYZus{}X} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+            
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{ls}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                \PY{n}{pred\PYZus{}X}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{ls}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+            
+            \PY{k}{return} \PY{n+nb}{list}\PY{p}{(}\PY{n}{linreg}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{pred\PYZus{}X}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{get\PYZus{}Prediction}\PY{p}{(}\PY{n}{housePrice}\PY{p}{,}\PY{p}{[}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{housePrice}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SalePrice}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+
 
 
     % Add a bibliography block to the postdoc
